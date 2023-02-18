@@ -9,13 +9,14 @@ import torch
 from torchvision import models
 import torchvision.transforms as transforms
 from PIL import Image
+import cv2
 
 app = Flask(__name__)
 CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 # load YOLO model
-model = torch.hub.load('./dataset/train/weights/best.pt', source='local')
+model = torch.hub.load('./yolov5/', 'custom', path='./yolov5/runs/train/weights/best.pt', source='local')
 
 # storing incoming images into POST communication
 def save_image(file):
