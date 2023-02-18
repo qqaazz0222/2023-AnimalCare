@@ -6,9 +6,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Document</title>
         <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+        <link rel="stylesheet" href="style.css" />
     </head>
     <body>
-        <div class="container">
+        <!-- <div class="container">
             <lottie-player
                 src="https://assets7.lottiefiles.com/packages/lf20_vyutxyym.json"
                 background="transparent"
@@ -18,6 +19,10 @@
                 autoplay
             ></lottie-player>
             <span class="text">Server is Working</span>
-        </div>
+        </div> -->
+        <form action="/test" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" id="file" />
+            <button type="submit">전송</button>
+        </form>
     </body>
 </html>
