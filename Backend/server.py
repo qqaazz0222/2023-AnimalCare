@@ -24,7 +24,7 @@ model = torch.hub.load('./yolov5/', 'custom',
 
 
 def save_image(file):
-    file.save('./images/' + file.filename)
+    file.save('./static/img/' + file.filename)
 
 
 @app.route('/')
@@ -43,13 +43,19 @@ def predict():
     if request.method == 'POST':
         file = request.files['file']
         save_image(file)
-        train_img = './images/' + file.filename
+        train_img = './static/img/' + file.filename
     # for dev & test, it will be remove...
     else:
-        train_img = './images/' + 'test(iphone).jpg'
+        train_img = './static/img/' + 'test(iphone).jpg'
     temp = model(train_img)
     print(temp)
-    return "done!"
+    if str(temp).split(" ")[4].split("\n")[0] == "good" or str(temp).split(" ")[4].split("\n")[0] == "goods":
+        # result = "<img src='./images/%s'/><h1>좋을 확률이 높음</h1><a href='/'>홈으로</a>" % file.filename
+        result = "좋을 확률이 높음"
+    else:
+        # result = "<img src='./images/%s'/><h1>나쁠 확률이 높음</h1><a href='/'>홈으로</a>" % file.filename
+        result = "나쁠 확률이 높음"
+    return render_template('result.html', img=file.filename, msg=result)
 
 
 if __name__ == '__main__':
