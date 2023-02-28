@@ -1,4 +1,5 @@
 api-key.json
+db.json
 *.pyc
 static/img/*
 

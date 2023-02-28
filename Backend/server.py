@@ -15,9 +15,9 @@ import cv2
 app = Flask(__name__)
 CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
-
-db = pymysql.connect(host="svc.gksl2.cloudtype.app", port=31535, user="root",
-                     passwd="4uvg2mlenu33f1", db="main", charset="utf8")
+config_db = json.load(open('db.json', encoding="utf-8"))
+db = pymysql.connect(host=config_db["host"], port=config_db["port"], user=config_db["user"],
+                     passwd=config_db["password"], db=config_db["db"], charset=config_db["charset"])
 cur = db.cursor()
 
 # load YOLO model
