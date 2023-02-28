@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <style>
+            @import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
+
+            @font-face {
+                font-family: "D2Coding";
+                src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_three@1.0/D2Coding.woff")
+                    format("woff");
+                font-weight: normal;
+                font-style: normal;
+            }
+
+            .notosanskr * {
+                font-family: "Noto Sans KR", sans-serif;
+            }
+            :root {
+                --col-main: #20c8a0;
+                --col-main-dark: #1ba685;
+            }
+            body {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            .page {
+                width: 100%;
+                max-width: 960px;
+            }
+            .link {
+                padding: 8px 12px;
+                border: 1.5px solid var(--col-main);
+                border-radius: 8px;
+            }
+
+            .link a {
+                text-decoration: none;
+                color: #20c8a0;
+                padding: 8px;
+            }
+
+            .item {
+                margin: 12px 0px;
+                margin-bottom: 20px;
+                padding: 12px 20px;
+                border: 1.5px solid var(--col-main);
+                border-radius: 12px;
+                box-shadow: 0px 0px 4px #ccc;
+            }
+            .code {
+                margin: 8px 0px;
+                padding: 20px;
+                background: #333;
+                border-radius: 8px;
+                color: #fff;
+                font-family: "D2Coding";
+            }
+            .code .key {
+                margin-left: 32px;
+                color: var(--col-main-dark);
+            }
+            .badge {
+                margin-right: 4px;
+                padding: 4px 8px;
+                background: var(--col-main);
+                border-radius: 4px;
+                color: #fff;
+            }
+            .method {
+                margin-right: 16px;
+                padding: 8px 12px;
+                background: var(--col-main);
+                border-radius: 8px;
+                color: #fff;
+                font-size: 14px;
+            }
+            form {
+                display: flex;
+                flex-direction: column;
+            }
+            form > input {
+                margin: 5px 0px;
+                padding: 8px 12px;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                font-size: 16px;
+                outline: none;
+            }
+            form > input:focus {
+                margin: 4px 0px;
+                border: 2px solid var(--col-main);
+            }
+            form > button {
+                margin: 4px 0px;
+                padding: 12px 16px;
+                background: var(--col-main);
+                border: none;
+                border-radius: 8px;
+                color: #fff;
+                font-size: 16px;
+            }
+            form > button:hover {
+                background: var(--col-main-dark);
+            }
+            table {
+                margin-bottom: 20px;
+                width: 100%;
+                background: #fff;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                overflow: hidden;
+            }
+            table th {
+                padding: 8px 12px;
+                border-right: 1px solid#ccc;
+                border-bottom: 1px solid#ccc;
+                font-size: 16px;
+                font-weight: bold;
+            }
+            table th:last-child {
+                border-right: none;
+            }
+            table td {
+                padding: 4px 8px;
+                border-right: 1px solid#ccc;
+                border-bottom: 1px solid#ccc;
+            }
+            table td:last-child {
+                border-right: none;
+            }
+            table tr:last-child td {
+                border-bottom: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="page">
+            <h1>AnimalCare API</h1>
+            <span class="badge">1.0.0</span><span class="badge">dev</span>
+            <p>AnimalCare Server API Document</p>
+            <div class="link">
+                <span>Link :</span>
+                <a href="#signin">SignIn</a>
+                <a href="#signup">SignUp</a>
+            </div>
+            <div class="itemlist">
+                <div class="item" id="signin">
+                    <h3 class="title">Function : Sign In</h3>
+                    <h2><span class="method">POST</span>/user/signin</h2>
+                    <h4>Parameter</h4>
+                    <table>
+                        <tr>
+                            <th>Key</th>
+                            <th>Description</th>
+                            <th>Example</th>
+                        </tr>
+                        <tr>
+                            <td>uid</td>
+                            <td>User ID</td>
+                            <td>testaccount</td>
+                        </tr>
+                        <tr>
+                            <td>upw</td>
+                            <td>User Password</td>
+                            <td>password1234</td>
+                        </tr>
+                    </table>
+                    <h4>Response</h4>
+                    <div class="code">
+                        { <br />
+                        <span class="key">"code"</span>: -9999, <br />
+                        <span class="key">"msg"</span>: "empty", <br />}
+                    </div>
+                    <table>
+                        <tr>
+                            <th>Code</th>
+                            <th>Msg</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>0</td>
+                            <td>Success!</td>
+                            <td>Sign In Success</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>You did not enter an ID.</td>
+                            <td>Request with no ID value</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>You did not enter a PW.</td>
+                            <td>Request with no password value</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>This ID does not exist.</td>
+                            <td>
+                                The requested ID does not exist in the database
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>Invalid password.</td>
+                            <td>
+                                The requested password does not match the
+                                password in the database
+                            </td>
+                        </tr>
+                    </table>
+                    <h4>Test Module</h4>
+                    <form action="/user/signin" method="post">
+                        <input type="text" name="uid" placeholder="id" />
+                        <input type="password" name="upw" placeholder="pw" />
+                        <button type="submit">Signin</button>
+                    </form>
+                </div>
+                <div class="item" id="signup">
+                    <h3 class="title">Function : Sign Up</h3>
+                    <h2><span class="method">POST</span>/user/signup</h2>
+                    <h4>Parameter</h4>
+                    <table>
+                        <tr>
+                            <th>Key</th>
+                            <th>Description</th>
+                            <th>Example</th>
+                        </tr>
+                        <tr>
+                            <td>uid</td>
+                            <td>User ID</td>
+                            <td>test</td>
+                        </tr>
+                        <tr>
+                            <td>upw</td>
+                            <td>User Password</td>
+                            <td>1234</td>
+                        </tr>
+                        <tr>
+                            <td>uname</td>
+                            <td>User Name</td>
+                            <td>username</td>
+                        </tr>
+                        <tr>
+                            <td>uemail</td>
+                            <td>User Email</td>
+                            <td>test@test.com</td>
+                        </tr>
+                    </table>
+                    <h4>Response</h4>
+                    <div class="code">
+                        { <br />
+                        <span class="key">"code"</span>: -9999, <br />
+                        <span class="key">"msg"</span>: "empty", <br />}
+                    </div>
+                    <table>
+                        <tr>
+                            <th>Code</th>
+                            <th>Msg</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>0</td>
+                            <td>Success!</td>
+                            <td>Sign Up Success</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>You did not enter an ID.</td>
+                            <td>Request with no ID value</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>You did not enter a PW.</td>
+                            <td>Request with no password value</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>You did not enter a Name.</td>
+                            <td>Request with no name value</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>You did not enter an Email.</td>
+                            <td>Request with no eamil value</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>The ID is already in use.</td>
+                            <td>
+                                The requested ID does not exist in the database
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>6 ~</td>
+                            <td>Return Contextual Messages.</td>
+                            <td>MySQL Error, Please read the message.</td>
+                        </tr>
+                    </table>
+                    <h4>Test Module</h4>
+                    <form action="/user/signup" method="post">
+                        <input type="text" name="uid" placeholder="id" />
+                        <input type="password" name="upw" placeholder="pw" />
+                        <input type="text" name="uname" placeholder="name" />
+                        <input type="email" name="uemail" placeholder="email" />
+                        <button type="submit">Signup</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

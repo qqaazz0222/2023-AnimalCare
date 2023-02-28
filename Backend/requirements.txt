@@ -5,3 +5,5 @@ torch>=1.13.1
 torchvision>=0.14.1
 image>=1.5.33
 opencv-python>=4.7.0.68
+mysql
+mysql-connector
