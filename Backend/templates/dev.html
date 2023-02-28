@@ -52,6 +52,14 @@
                 border-radius: 12px;
                 box-shadow: 0px 0px 4px #ccc;
             }
+            .path {
+                margin: 8px 0px;
+                padding: 16px 8px;
+                background: #333;
+                border-radius: 8px;
+                color: #fff;
+                font-family: "D2Coding";
+            }
             .code {
                 margin: 8px 0px;
                 padding: 20px;
@@ -145,13 +153,18 @@
             <p>AnimalCare Server API Document</p>
             <div class="link">
                 <span>Link :</span>
-                <a href="#signin">SignIn</a>
-                <a href="#signup">SignUp</a>
+                <a href="#user-signin">#SignIn</a>
+                <a href="#user-signup">#SignUp</a>
+                <a href="#pet-register">#RegisterPet</a>
             </div>
             <div class="itemlist">
-                <div class="item" id="signin">
+                <!-- 로그인 -->
+                <div class="item" id="user-signin">
                     <h3 class="title">Function : Sign In</h3>
-                    <h2><span class="method">POST</span>/user/signin</h2>
+                    <div class="path">
+                        <span class="method">POST</span
+                        ><span>/user/signin</span>
+                    </div>
                     <h4>Parameter</h4>
                     <table>
                         <tr>
@@ -220,9 +233,13 @@
                         <button type="submit">Signin</button>
                     </form>
                 </div>
-                <div class="item" id="signup">
+                <!-- 회원가입 -->
+                <div class="item" id="user-signup">
                     <h3 class="title">Function : Sign Up</h3>
-                    <h2><span class="method">POST</span>/user/signup</h2>
+                    <div class="path">
+                        <span class="method">POST</span
+                        ><span>/user/signup</span>
+                    </div>
                     <h4>Parameter</h4>
                     <table>
                         <tr>
@@ -308,6 +325,112 @@
                         <input type="text" name="uname" placeholder="name" />
                         <input type="email" name="uemail" placeholder="email" />
                         <button type="submit">Signup</button>
+                    </form>
+                </div>
+                <!-- 반려견 등록 -->
+                <div class="item" id="pet-register">
+                    <h3 class="title">Function : Register Pet</h3>
+                    <div class="path">
+                        <span class="method">POST</span
+                        ><span>/pet/register</span>
+                    </div>
+                    <h4>Parameter</h4>
+                    <table>
+                        <tr>
+                            <th>Key</th>
+                            <th>Description</th>
+                            <th>Example</th>
+                        </tr>
+                        <tr>
+                            <td>petname</td>
+                            <td>Pet Name (Required)</td>
+                            <td>초코</td>
+                        </tr>
+                        <tr>
+                            <td>petsex</td>
+                            <td>Pet Sex (Required)</td>
+                            <td>M or F</td>
+                        </tr>
+                        <tr>
+                            <td>petbirthyear</td>
+                            <td>Year the dog was born.</td>
+                            <td>2023</td>
+                        </tr>
+                        <tr>
+                            <td>petbirthmonth</td>
+                            <td>Month the dog was born.</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>petadoptyear</td>
+                            <td>Year the dog was adopt.</td>
+                            <td>2023</td>
+                        </tr>
+                        <tr>
+                            <td>petadoptmonth</td>
+                            <td>Month the dog was adopt.</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>petweight</td>
+                            <td>The dog's weight</td>
+                            <td>5.0</td>
+                        </tr>
+                        <tr>
+                            <td>uid</td>
+                            <td>User ID for registering a pet</td>
+                            <td>testuser</td>
+                        </tr>
+                    </table>
+                    <h4>Response</h4>
+                    <div class="code">
+                        { <br />
+                        <span class="key">"code"</span>: -9999, <br />
+                        <span class="key">"msg"</span>: "empty", <br />}
+                    </div>
+                    <table>
+                        <tr>
+                            <th>Code</th>
+                            <th>Msg</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>0</td>
+                            <td>Success!</td>
+                            <td>Register Pet Success</td>
+                        </tr>
+                    </table>
+                    <h4>Test Module</h4>
+                    <form action="/user/signup" method="post">
+                        <input type="text" name="petname" placeholder="id" />
+                        <input type="text" name="petsex" placeholder="pw" />
+                        <input
+                            type="number"
+                            name="petbirthyear"
+                            placeholder="Pet Birth Year"
+                        />
+                        <input
+                            type="number"
+                            name="petbirthmonth"
+                            placeholder="Pet Birth Month"
+                        />
+                        <input
+                            type="number"
+                            name="petadoptyear"
+                            placeholder="Pet Adopt Year"
+                        />
+                        <input
+                            type="number"
+                            name="petadoptmonth"
+                            placeholder="Pet Adopt Month"
+                        />
+                        <input
+                            type="number"
+                            name="petweight"
+                            placeholder="Pet Weight"
+                        />
+                        <input type="text" name="uid" placeholder="User ID" />
+                        <button type="submit">Register Pet</button>
                     </form>
                 </div>
             </div>
