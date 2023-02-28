@@ -1,2 +1,3 @@
-static/img/
 api-key.json
+*.pyc
+static/img/*
