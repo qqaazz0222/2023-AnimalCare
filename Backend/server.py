@@ -10,6 +10,7 @@ from operator import itemgetter
 # Load Functions
 import __user__
 import __pet__
+import __log__
 # import __yolo__
 
 
@@ -24,53 +25,44 @@ cur = db.cursor()
 
 
 @app.route('/')
-# cors error processing
 @cross_origin()
-# main page loading
 def web():
     return render_template('index.html')
 
-# incomimg images processing with YOLOv5, GET methods for test
-
-
-# @app.route('/test', methods=['GET', 'POST'])
-# def predict():
-#     if request.method == 'POST':
-#         file = request.files['file']
-#         save_image(file)
-#         train_img = './static/predictimg/' + file.filename
-#     else:
-#         train_img = './static/predictimg/' + 'test(iphone).jpg'
-#     temp = model(train_img)
-#     print(temp)
-#     if str(temp).split(" ")[4].split("\n")[0] == "good" or str(temp).split(" ")[4].split("\n")[0] == "goods":
-#         # result = "<img src='./images/%s'/><h1>좋을 확률이 높음</h1><a href='/'>홈으로</a>" % file.filename
-#         result = "좋을 확률이 높음"
-#     else:
-#         # result = "<img src='./images/%s'/><h1>나쁠 확률이 높음</h1><a href='/'>홈으로</a>" % file.filename
-#         result = "나쁠 확률이 높음"
-#     return render_template('result.html', img=file.filename, msg=result)
-
-
-@app.route('/dev', methods=['GET'])
-def dev():
-    return render_template('dev.html')
+# -----------------------------------------------------------------
+#                         User Fuctions
+# -----------------------------------------------------------------
 
 
 @app.route('/user/signin', methods=['POST'])
+@cross_origin()
 def userSignIn():
     uid, upw = itemgetter('uid', 'upw')(request.form)
     return __user__.signIn(uid, upw)
 
 
 @app.route('/user/signup', methods=['POST'])
+@cross_origin()
 def userSignUp():
     uid, upw, uname, uemail = itemgetter(
         'uid', 'upw', 'uname', 'uemail')(request.form)
     return __user__.signUp(uid, upw, uname, uemail)
 
 
+@app.route('/user/uploadimg', methods=['POST'])
+@cross_origin()
+def userUploadImg():
+    uid = request.form['uid']
+    img = request.files['img']
+    return __user__.uploadImg(uid, img)
+
+# -----------------------------------------------------------------
+#                         Pet Fuctions
+# -----------------------------------------------------------------
+
+
 @app.route('/pet/register', methods=['POST'])
+@cross_origin()
 def petRegister():
     petName, petSex, petBirthYear, petBirthMonth, petAdoptYear, petAdoptMonth, petWeight, uid = itemgetter(
         'petName', 'petSex', 'petBirthYear', 'petBirthMonth', 'petAdoptYear', 'petAdoptMonth', 'petWeight', 'uid')(request.form)
@@ -78,18 +70,21 @@ def petRegister():
 
 
 @app.route('/pet/getlist', methods=['POST'])
+@cross_origin()
 def petGetList():
     uid = itemgetter('uid')(request.form)
     return __pet__.getList(uid)
 
 
 @app.route('/pet/getinfo', methods=['POST'])
+@cross_origin()
 def petGetInfo():
     petid = itemgetter('petid')(request.form)
     return __pet__.getInfo(petid)
 
 
 @app.route('/pet/modify', methods=['POST'])
+@cross_origin()
 def petModify():
     petid, petName, petSex, petBirthYear, petBirthMonth, petAdoptYear, petAdoptMonth, petWeight, uid = itemgetter(
         'petid', 'petName', 'petSex', 'petBirthYear', 'petBirthMonth', 'petAdoptYear', 'petAdoptMonth', 'petWeight', 'uid')(request.form)
@@ -97,10 +92,38 @@ def petModify():
 
 
 @app.route('/pet/uploadimg', methods=['POST'])
+@cross_origin()
 def petUploadImg():
     petid = request.form['petid']
     img = request.files['img']
     return __pet__.uploadImg(petid, img)
+
+# -----------------------------------------------------------------
+#                         Log Fuctions
+# -----------------------------------------------------------------
+
+
+@app.route('/log/getlist', methods=['POST'])
+@cross_origin()
+def logGetList():
+    petid = itemgetter('petid')(request.form)
+    return __log__.getList(petid)
+
+
+@app.route('/log/getinfo', methods=['POST'])
+@cross_origin()
+def logGetInfo():
+    petid, year, month, day = itemgetter(
+        'petid', 'year', 'month', 'day')(request.form)
+    return __log__.getInfo(petid, year, month, day)
+
+
+@app.route('/log/healthcheck', methods=['POST'])
+@cross_origin()
+def logHealthCheck():
+    petid = request.form['petid']
+    img = request.files['img']
+    return __log__.healthCheck(petid, img)
 
 
 if __name__ == '__main__':

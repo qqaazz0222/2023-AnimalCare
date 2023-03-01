@@ -63,7 +63,7 @@ def signUp(uid, upw, uname, uemail):
             resMsg["code"] = 4
             resMsg["msg"] = "You did not enter an Email."
             return resMsg
-        sql = "INSERT INTO user VALUES('%s', '%s', '%s', '%s')" % (
+        sql = "INSERT INTO user VALUES('%s', '%s', '%s', '%s', null)" % (
             uid, upw, uname, uemail)
         server.cur.execute(sql)
         server.db.commit()
@@ -78,4 +78,21 @@ def signUp(uid, upw, uname, uemail):
         else:
             resMsg["code"] = code
             resMsg["msg"] = msg
+        return resMsg
+
+
+def uploadImg(uid, img):
+    try:
+        path = './static/userimg/' + uid + '.' + img.mimetype.split('/')[1]
+        img.save(path)
+        sql = "UPDATE user SET uimg = '%s' WHERE uid = '%s'" % (path, uid)
+        server.cur.execute(sql)
+        server.db.commit()
+        resMsg["code"] = 0
+        resMsg["msg"] = "Success!"
+        return jsonify(resMsg)
+    except pymysql.err.IntegrityError as e:
+        code, msg = e.args
+        resMsg["code"] = code
+        resMsg["msg"] = msg
         return resMsg

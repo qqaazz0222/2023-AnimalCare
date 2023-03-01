@@ -9,111 +9,182 @@
         <!-- <link rel="stylesheet" href="/static/style/style.css" /> -->
     </head>
     <body>
-        <h1>userSignIn</h1>
-        <form action="/user/signin" method="post">
-            <input type="text" name="uid" placeholder="id" />
-            <input type="password" name="upw" placeholder="pw" />
-            <button type="submit">Submit</button>
-        </form>
-        <h1>userSignUp</h1>
-        <form action="/user/signup" method="post">
-            <input type="text" name="uid" placeholder="id" />
-            <input type="password" name="upw" placeholder="pw" />
-            <input type="text" name="uname" placeholder="name" />
-            <input type="email" name="uemail" placeholder="email" />
-            <button type="submit">Submit</button>
-        </form>
-        <h1>petRegister</h1>
-        <form action="/pet/register" method="post">
-            <input type="text" name="petName" placeholder="pet name" />
-            <input type="text" name="petSex" placeholder="pet sex" />
-            <input
-                type="number"
-                name="petBirthYear"
-                placeholder="Pet Birth Year"
-                min="1900"
-                max="2023"
-            />
-            <input
-                type="number"
-                name="petBirthMonth"
-                placeholder="Pet Birth Month"
-                min="1"
-                max="12"
-            />
-            <input
-                type="number"
-                name="petAdoptYear"
-                placeholder="Pet Adopt Year"
-                min="1900"
-                max="2023"
-            />
-            <input
-                type="number"
-                name="petAdoptMonth"
-                placeholder="Pet Adopt Month"
-                min="1"
-                max="12"
-            />
-            <input type="number" name="petWeight" placeholder="Pet Weight" />
-            <input type="text" name="uid" placeholder="User ID" />
-            <button type="submit">Submit</button>
-        </form>
-        <h1>petGetList</h1>
-        <form action="/pet/getlist" method="post">
-            <input type="text" name="uid" placeholder="User ID" />
-            <button type="submit">Submit</button>
-        </form>
-        <h1>petGetInfo</h1>
-        <form action="/pet/getinfo" method="post">
-            <input type="text" name="petid" placeholder="Pet ID" />
-            <button type="submit">Submit</button>
-        </form>
-        <h1>petModify</h1>
-        <form action="/pet/modify" method="post">
-            <input type="text" name="petName" placeholder="pet name" />
-            <input type="text" name="petSex" placeholder="pet sex" />
-            <input
-                type="number"
-                name="petBirthYear"
-                placeholder="Pet Birth Year"
-                min="1900"
-                max="2023"
-            />
-            <input
-                type="number"
-                name="petBirthMonth"
-                placeholder="Pet Birth Month"
-                min="1"
-                max="12"
-            />
-            <input
-                type="number"
-                name="petAdoptYear"
-                placeholder="Pet Adopt Year"
-                min="1900"
-                max="2023"
-            />
-            <input
-                type="number"
-                name="petAdoptMonth"
-                placeholder="Pet Adopt Month"
-                min="1"
-                max="12"
-            />
-            <input type="number" name="petWeight" placeholder="Pet Weight" />
-            <input type="text" name="uid" placeholder="User ID" />
-            <button type="submit">Submit</button>
-        </form>
-        <h1>petUploadImg</h1>
-        <form
-            action="/pet/uploadimg"
-            method="post"
-            enctype="multipart/form-data"
-        >
-            <input type="file" name="img" id="file" accept="image/*" />
-            <input type="text" name="petid" placeholder="petid" />
-            <button type="submit">Submit</button>
-        </form>
+        <div class="log">
+            <h1>logGetList</h1>
+            <form action="/log/getlist" method="post">
+                <input type="text" name="petid" placeholder="Pet ID" />
+                <button type="submit">Submit</button>
+            </form>
+            <h1>logGetInfo</h1>
+            <form action="/log/getinfo" method="post">
+                <input type="text" name="petid" placeholder="Pet ID" />
+                <input type="number" name="year" placeholder="YYYY" />
+                <input type="number" name="month" placeholder="MM" />
+                <input type="number" name="day" placeholder="DD" />
+                <button type="submit">Submit</button>
+            </form>
+            <h1>userUploadImg</h1>
+            <form
+                action="/log/healthcheck"
+                method="post"
+                enctype="multipart/form-data"
+            >
+                <input type="text" name="petid" placeholder="Pet ID" />
+                <input type="file" name="img" id="file" accept="image/*" />
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+        <span
+            style="
+                display: inline-block;
+                width: 100vw;
+                height: 2px;
+                background: #ccc;
+            "
+        ></span>
+        <div class="user">
+            <h1>userSignIn</h1>
+            <form action="/user/signin" method="post">
+                <input type="text" name="uid" placeholder="id" />
+                <input type="password" name="upw" placeholder="pw" />
+                <button type="submit">Submit</button>
+            </form>
+            <h1>userSignUp</h1>
+            <form action="/user/signup" method="post">
+                <input type="text" name="uid" placeholder="id" />
+                <input type="password" name="upw" placeholder="pw" />
+                <input type="text" name="uname" placeholder="name" />
+                <input type="email" name="uemail" placeholder="email" />
+                <button type="submit">Submit</button>
+            </form>
+            <h1>userUploadImg</h1>
+            <form
+                action="/user/uploadimg"
+                method="post"
+                enctype="multipart/form-data"
+            >
+                <input type="file" name="img" id="file" accept="image/*" />
+                <input type="text" name="uid" placeholder="User ID" />
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+        <span
+            style="
+                display: inline-block;
+                width: 100vw;
+                height: 2px;
+                background: #ccc;
+            "
+        ></span>
+        <div class="pet">
+            <h1>petRegister</h1>
+            <form action="/pet/register" method="post">
+                <input type="text" name="petName" placeholder="Pet Name" />
+                <input type="text" name="petSex" placeholder="Pet Sex" />
+                <input
+                    type="number"
+                    name="petBirthYear"
+                    placeholder="Pet Birth Year"
+                    min="1900"
+                    max="2023"
+                />
+                <input
+                    type="number"
+                    name="petBirthMonth"
+                    placeholder="Pet Birth Month"
+                    min="1"
+                    max="12"
+                />
+                <input
+                    type="number"
+                    name="petAdoptYear"
+                    placeholder="Pet Adopt Year"
+                    min="1900"
+                    max="2023"
+                />
+                <input
+                    type="number"
+                    name="petAdoptMonth"
+                    placeholder="Pet Adopt Month"
+                    min="1"
+                    max="12"
+                />
+                <input
+                    type="number"
+                    name="petWeight"
+                    placeholder="Pet Weight"
+                />
+                <input type="text" name="uid" placeholder="User ID" />
+                <button type="submit">Submit</button>
+            </form>
+            <h1>petGetList</h1>
+            <form action="/pet/getlist" method="post">
+                <input type="text" name="uid" placeholder="User ID" />
+                <button type="submit">Submit</button>
+            </form>
+            <h1>petGetInfo</h1>
+            <form action="/pet/getinfo" method="post">
+                <input type="text" name="petid" placeholder="Pet ID" />
+                <button type="submit">Submit</button>
+            </form>
+            <h1>petModify</h1>
+            <form action="/pet/modify" method="post">
+                <input type="text" name="petName" placeholder="pet name" />
+                <input type="text" name="petSex" placeholder="pet sex" />
+                <input
+                    type="number"
+                    name="petBirthYear"
+                    placeholder="Pet Birth Year"
+                    min="1900"
+                    max="2023"
+                />
+                <input
+                    type="number"
+                    name="petBirthMonth"
+                    placeholder="Pet Birth Month"
+                    min="1"
+                    max="12"
+                />
+                <input
+                    type="number"
+                    name="petAdoptYear"
+                    placeholder="Pet Adopt Year"
+                    min="1900"
+                    max="2023"
+                />
+                <input
+                    type="number"
+                    name="petAdoptMonth"
+                    placeholder="Pet Adopt Month"
+                    min="1"
+                    max="12"
+                />
+                <input
+                    type="number"
+                    name="petWeight"
+                    placeholder="Pet Weight"
+                />
+                <input type="text" name="uid" placeholder="User ID" />
+                <button type="submit">Submit</button>
+            </form>
+            <h1>petUploadImg</h1>
+            <form
+                action="/pet/uploadimg"
+                method="post"
+                enctype="multipart/form-data"
+            >
+                <input type="file" name="img" id="file" accept="image/*" />
+                <input type="text" name="petid" placeholder="petid" />
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+        <span
+            style="
+                display: inline-block;
+                width: 100vw;
+                height: 2px;
+                background: #ccc;
+            "
+        ></span>
     </body>
 </html>

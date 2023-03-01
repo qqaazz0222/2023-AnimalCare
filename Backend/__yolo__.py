@@ -10,11 +10,14 @@ import json
 model = torch.hub.load('./yolov5/', 'custom',
                        path='./yolov5/runs/train/weights/best.pt', source='local')
 
-resMsg = {
-    "code": -9999,
-    "msg": "empty",
-}
-
 
 def saveImage(file):
     file.save('./static/predictimg/' + file.filename)
+
+
+def predict(imgPath):
+    temp = model(imgPath)
+    if str(temp).split(" ")[4].split("\n")[0] == "good" or str(temp).split(" ")[4].split("\n")[0] == "goods":
+        return "g"
+    else:
+        return "b"

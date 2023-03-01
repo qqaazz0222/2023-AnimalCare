@@ -6,7 +6,6 @@ import pymysql
 import json
 import server
 
-
 resMsg = {
     "code": -9999,
     "msg": "empty",
