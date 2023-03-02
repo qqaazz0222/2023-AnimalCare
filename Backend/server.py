@@ -48,6 +48,19 @@ def userSignUp():
         'uid', 'upw', 'uname', 'uemail')(request.form)
     return __user__.signUp(uid, upw, uname, uemail)
 
+@app.route('/user/getinfo', methods=['POST'])
+@cross_origin()
+def userGetInfo():
+    uid = itemgetter('uid')(request.form)
+    return __user__.getInfo(uid)
+
+@app.route('/user/modify', methods=['POST'])
+@cross_origin()
+def userModify():
+    uid, upw, uname, uemail = itemgetter(
+        'uid', 'upw', 'uname', 'uemail')(request.form)
+    return __user__.modify(uid, upw, uname, uemail)
+
 
 @app.route('/user/uploadimg', methods=['POST'])
 @cross_origin()
