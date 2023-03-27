@@ -106,6 +106,13 @@ def petModify():
     return __pet__.modify(petid, petName, petSex, petBirthYear, petBirthMonth, petAdoptYear, petAdoptMonth, petWeight, uid)
 
 
+@app.route('/pet/delinfo', methods=['POST'])
+@cross_origin()
+def petGetInfo():
+    petid = itemgetter('petid')(request.form)
+    return __pet__.delinfo(petid)
+
+
 @app.route('/pet/uploadimg', methods=['POST'])
 @cross_origin()
 def petUploadImg():

@@ -87,6 +87,19 @@ def modify(petid, petName, petSex, petBirthYear, petBirthMonth, petAdoptYear, pe
         return resMsg
 
 
+def delinfo(petid):
+    try:
+        sql = "DELETE * FROM pet WHERE petid = '%s'" % (petid)
+        server.cur.execute(sql)
+        result = server.cur.fetchone()
+        return jsonify(result)
+    except pymysql.err.IntegrityError as e:
+        code, msg = e.args
+        resMsg["code"] = code
+        resMsg["msg"] = msg
+        return resMsg
+
+
 def uploadImg(petid, img):
     try:
         path = './static/petimg/' + petid + '.' + img.mimetype.split('/')[1]
