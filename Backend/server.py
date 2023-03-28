@@ -37,7 +37,7 @@ def web():
 @app.route('/user/signin', methods=['POST'])
 @cross_origin()
 def userSignIn():
-    uid, upw = itemgetter('uid', 'upw')(request.form)
+    uid, upw = itemgetter('uid', 'upw')(request.json)
     return __user__.signIn(uid, upw)
 
 
@@ -45,14 +45,14 @@ def userSignIn():
 @cross_origin()
 def userSignUp():
     uid, upw, uname, uemail = itemgetter(
-        'uid', 'upw', 'uname', 'uemail')(request.form)
+        'uid', 'upw', 'uname', 'uemail')(request.json)
     return __user__.signUp(uid, upw, uname, uemail)
 
 
 @app.route('/user/getinfo', methods=['POST'])
 @cross_origin()
 def userGetInfo():
-    uid = itemgetter('uid')(request.form)
+    uid = itemgetter('uid')(request.json)
     return __user__.getInfo(uid)
 
 
@@ -60,14 +60,14 @@ def userGetInfo():
 @cross_origin()
 def userModify():
     uid, upw, uname, uemail = itemgetter(
-        'uid', 'upw', 'uname', 'uemail')(request.form)
+        'uid', 'upw', 'uname', 'uemail')(request.json)
     return __user__.modify(uid, upw, uname, uemail)
 
 
 @app.route('/user/uploadimg', methods=['POST'])
 @cross_origin()
 def userUploadImg():
-    uid = request.form['uid']
+    uid = request.json['uid']
     img = request.files['img']
     return __user__.uploadImg(uid, img)
 
@@ -80,21 +80,21 @@ def userUploadImg():
 @cross_origin()
 def petRegister():
     petName, petSex, petBirthYear, petBirthMonth, petAdoptYear, petAdoptMonth, petWeight, uid = itemgetter(
-        'petName', 'petSex', 'petBirthYear', 'petBirthMonth', 'petAdoptYear', 'petAdoptMonth', 'petWeight', 'uid')(request.form)
+        'petName', 'petSex', 'petBirthYear', 'petBirthMonth', 'petAdoptYear', 'petAdoptMonth', 'petWeight', 'uid')(request.json)
     return __pet__.register(petName, petSex, petBirthYear, petBirthMonth, petAdoptYear, petAdoptMonth, petWeight, uid)
 
 
 @app.route('/pet/getlist', methods=['POST'])
 @cross_origin()
 def petGetList():
-    uid = itemgetter('uid')(request.form)
+    uid = itemgetter('uid')(request.json)
     return __pet__.getList(uid)
 
 
 @app.route('/pet/getinfo', methods=['POST'])
 @cross_origin()
 def petGetInfo():
-    petid = itemgetter('petid')(request.form)
+    petid = itemgetter('petid')(request.json)
     return __pet__.getInfo(petid)
 
 
@@ -102,21 +102,21 @@ def petGetInfo():
 @cross_origin()
 def petModify():
     petid, petName, petSex, petBirthYear, petBirthMonth, petAdoptYear, petAdoptMonth, petWeight, uid = itemgetter(
-        'petid', 'petName', 'petSex', 'petBirthYear', 'petBirthMonth', 'petAdoptYear', 'petAdoptMonth', 'petWeight', 'uid')(request.form)
+        'petid', 'petName', 'petSex', 'petBirthYear', 'petBirthMonth', 'petAdoptYear', 'petAdoptMonth', 'petWeight', 'uid')(request.json)
     return __pet__.modify(petid, petName, petSex, petBirthYear, petBirthMonth, petAdoptYear, petAdoptMonth, petWeight, uid)
 
 
 @app.route('/pet/delinfo', methods=['POST'])
 @cross_origin()
-def petGetInfo():
-    petid = itemgetter('petid')(request.form)
+def petDelInfo():
+    petid = itemgetter('petid')(request.json)
     return __pet__.delinfo(petid)
 
 
 @app.route('/pet/uploadimg', methods=['POST'])
 @cross_origin()
 def petUploadImg():
-    petid = request.form['petid']
+    petid = request.json['petid']
     img = request.files['img']
     return __pet__.uploadImg(petid, img)
 
@@ -128,7 +128,7 @@ def petUploadImg():
 @app.route('/log/getlist', methods=['POST'])
 @cross_origin()
 def logGetList():
-    petid = itemgetter('petid')(request.form)
+    petid = itemgetter('petid')(request.json)
     return __log__.getList(petid)
 
 
@@ -136,14 +136,14 @@ def logGetList():
 @cross_origin()
 def logGetInfo():
     petid, year, month, day = itemgetter(
-        'petid', 'year', 'month', 'day')(request.form)
+        'petid', 'year', 'month', 'day')(request.json)
     return __log__.getInfo(petid, year, month, day)
 
 
 @app.route('/log/healthcheck', methods=['POST'])
 @cross_origin()
 def logHealthCheck():
-    petid = request.form['petid']
+    petid = request.json['petid']
     img = request.files['img']
     return __log__.healthCheck(petid, img)
 

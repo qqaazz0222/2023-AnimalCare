@@ -35,8 +35,15 @@ def register(petName, petSex, petBirthYear, petBirthMonth, petAdoptYear, petAdop
                 petName, petSex, petBirthYear, petBirthMonth, petAdoptYear, petAdoptMonth, petWeight, uid)
             server.cur.execute(sql)
             server.db.commit()
+            sql = "SELECT petid FROM pet WHERE petname = '%s' and uid = '%s'" % (
+                petName, uid)
+            server.cur.execute(sql)
+            server.db.commit()
+            petId = server.cur.fetchone()
+            print(result)
             resMsg["code"] = 0
             resMsg["msg"] = "Success!"
+            resMsg["petID"] = petId[0]
         return resMsg
     except pymysql.err.IntegrityError as e:
         code, msg = e.args
