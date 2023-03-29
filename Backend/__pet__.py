@@ -5,6 +5,9 @@ from flask import make_response
 import pymysql
 import json
 import server
+from PIL import Image
+
+
 
 resMsg = {
     "code": -9999,
@@ -64,6 +67,17 @@ def getList(uid):
         resMsg["msg"] = msg
         return resMsg
 
+def getListCountPets(uid):
+    try:
+        sql = "SELECT COUNT(*) FROM pet WHERE uid = '%s'" % (uid)
+        server.cur.execute(sql)
+        result = server.cur.fetchone()
+        return jsonify(result)
+    except pymysql.err.IntegrityError as e:
+        code, msg = e.args
+        resMsg["code"] = code
+        resMsg["msg"] = msg
+        return resMsg
 
 def getInfo(petid):
     try:
@@ -109,8 +123,15 @@ def delinfo(petid):
 
 def uploadImg(petid, img):
     try:
-        path = './static/petimg/' + petid + '.' + img.mimetype.split('/')[1]
-        img.save(path)
+        # # For testing
+        # path = './static/petimg/' + petid + '.' + img.mimetype.split('/')[1]
+        # img.save(path)
+
+        
+        decodedImg = Image.open(io.BytesIO(img.read()))
+        path = './static/petimg/' + petid + '.' + decodedImg.format
+        print(decodedImg)
+        decodedImg.save(path)
         sql = "UPDATE pet SET petimg = '%s' WHERE petid = %s" % (path, petid)
         server.cur.execute(sql)
         server.db.commit()

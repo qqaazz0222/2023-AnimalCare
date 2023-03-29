@@ -73,8 +73,7 @@ class _LoginPageState extends State<LoginPage> {
         print(responseJson["msg"]);
         await _secureStorage.setUserName(
             _usernameController.text); // Add UserID into Secure Storage
-        final count =
-            await _petGetListCount(); // Get the number of pets for entered user
+        final count = await _petGetListCount(); // Get the number of pets for entered user
         print(count);
         if (context.mounted) {
           if (count == 0) {

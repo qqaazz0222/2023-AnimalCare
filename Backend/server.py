@@ -87,8 +87,14 @@ def petRegister():
 @app.route('/pet/getlist', methods=['POST'])
 @cross_origin()
 def petGetList():
-    uid = itemgetter('uid')(request.json)
+    uid = itemgetter('uid')(request.form)
     return __pet__.getList(uid)
+
+@app.route('/pet/getlist/countpets', methods=['POST'])
+@cross_origin()
+def petGetListCountPets():
+    uid = itemgetter('uid')(request.json)
+    return __pet__.getListCountPets(uid)
 
 
 @app.route('/pet/getinfo', methods=['POST'])
@@ -116,8 +122,10 @@ def petDelInfo():
 @app.route('/pet/uploadimg', methods=['POST'])
 @cross_origin()
 def petUploadImg():
-    petid = request.json['petid']
+    print("I'm Here")
+    petid = request.form['petid']
     img = request.files['img']
+    print(img)
     return __pet__.uploadImg(petid, img)
 
 # -----------------------------------------------------------------

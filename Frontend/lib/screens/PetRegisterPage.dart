@@ -1,9 +1,15 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:animal_care_flutter_app/screens/HomePage.dart';
 import 'package:animal_care_flutter_app/utils/AppConfig.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+
+import '../utils/UploadImage.dart';
 
 class PetRegisterPage extends StatefulWidget {
   const PetRegisterPage({Key? key}) : super(key: key);
@@ -41,23 +47,68 @@ class _PetRegisterPageState extends State<PetRegisterPage> {
 
   // Post entered data to the server
   Future<void> _sendDataToApi() async {
-    final petRegisterUrl = Uri.parse("${Server.serverUrl}/pet/register");
-    final response = await http.post(
-      petRegisterUrl,
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'petName':_nameController.text,
-        'petSex': _gender,
-        'petBirthYear': _birthdayController.text.substring(0,4),
-        'petBirthMonth': _birthdayController.text.substring(5),
-        'petAdoptYear': _adoptionDateController.text.substring(0,4),
-        'petAdoptMonth':_adoptionDateController.text.substring(5),
-        'petWeight': _weightController.text,
-        'uid': await _secureStorage.getUserName() ?? '',
-      })
-    );
+    int? petId;
 
-    // print(response.body);
+    final petRegisterUrl = Uri.parse("${Server.serverUrl}/pet/register");
+    final petUploadImgUrl = Uri.parse("${Server.serverUrl}/pet/uploadimg");
+
+    final response = await http.post(petRegisterUrl,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'petName': _nameController.text,
+          'petSex': _gender,
+          'petBirthYear': _birthdayController.text.substring(0, 4),
+          'petBirthMonth': _birthdayController.text.substring(5),
+          'petAdoptYear': _adoptionDateController.text.substring(0, 4),
+          'petAdoptMonth': _adoptionDateController.text.substring(5),
+          'petWeight': _weightController.text,
+          'uid': await _secureStorage.getUserName() ?? '',
+        }));
+
+    final responseJson = jsonDecode(response.body);
+    petId = responseJson["petID"];
+
+    if (responseJson["code"] == 0) {
+
+      final responseUploadImgCode = await uploadImage(imageGallery!, petUploadImgUrl, petId);
+      print("Response code: $responseUploadImgCode");
+
+      if (responseUploadImgCode == 0){
+        if (context.mounted) {
+          context.push(HomePage.id);
+        }
+      }else{
+        print("Couldn't upload image");
+      }
+    }
+  }
+
+  File? imageGallery;
+
+  Future pickImageGallery() async {
+    try {
+      final imageGallery =
+          await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (imageGallery == null) return;
+      final imageTemp = File(imageGallery.path);
+      setState(() => this.imageGallery = imageTemp);
+    } on PlatformException catch (e) {
+      print('Failed to pick image: $e');
+    }
+  }
+
+  File? imageCamera;
+
+  Future pickImageCamera() async {
+    try {
+      final imageCamera =
+          await ImagePicker().pickImage(source: ImageSource.camera);
+      if (imageCamera == null) return;
+      final imageTemp = File(imageCamera.path);
+      setState(() => this.imageCamera = imageTemp);
+    } on PlatformException catch (e) {
+      print('Failed to pick image: $e');
+    }
   }
 
   @override
@@ -78,8 +129,41 @@ class _PetRegisterPageState extends State<PetRegisterPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("우리집 강아지를"),
-                    Text("소개해 주세요!"),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text("우리집 강아지를"),
+                            Text("소개해 주세요!"),
+                          ],
+                        ),
+                        //TODO: Delete photo if clicked on the chosen photo
+                        InkWell(
+                          onTap: () {
+                            pickImageGallery();
+                          },
+                          child: CircleAvatar(
+                            backgroundColor: Colors.grey[200],
+                            radius: 48,
+                            child: (imageGallery == null)
+                                ? Icon(Icons.camera_alt)
+                                : ClipOval(
+                                    child: SizedBox(
+                                      height: 96,
+                                      width: 96,
+                                      child: Image.file(
+                                        imageGallery!,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                          ),
+                        )
+                      ],
+                    ),
                     Text("일부 정보를 간편하게 입력받을 수 있어요."),
                     Text("동물등록번호 입력하기"),
                     SizedBox(
@@ -158,7 +242,8 @@ class _PetRegisterPageState extends State<PetRegisterPage> {
                     SizedBox(height: 8),
                     TextFormField(
                       controller: _weightController,
-                      keyboardType: TextInputType.numberWithOptions(decimal: true),
+                      keyboardType:
+                          TextInputType.numberWithOptions(decimal: true),
                       decoration: InputDecoration(
                         labelText: "Weight",
                       ),
@@ -177,8 +262,8 @@ class _PetRegisterPageState extends State<PetRegisterPage> {
                       width: 200,
                       child: ElevatedButton(
                         onPressed: () => _sendDataToApi(),
-                        style:
-                            ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green),
                         child: const Text(
                           "Continue",
                           style: TextStyle(
