@@ -6,6 +6,7 @@ import pymysql
 import json
 import server
 from PIL import Image
+import base64
 
 
 
@@ -54,6 +55,18 @@ def register(petName, petSex, petBirthYear, petBirthMonth, petAdoptYear, petAdop
         resMsg["msg"] = msg
         return resMsg
 
+# Delete ALL pets by user ID
+def deleteAllPets(uid):
+    try:
+        sql = "DELETE FROM pet WHERE uid = '%s'" % (uid)
+        server.cur.execute(sql)
+        result = server.cur.fetchone()
+        return jsonify(result)
+    except pymysql.err.IntegrityError as e:
+        code, msg = e.args
+        resMsg["code"] = code
+        resMsg["msg"] = msg
+        return resMsg
 
 def getList(uid):
     try:
@@ -126,13 +139,22 @@ def uploadImg(petid, img):
         # # For testing
         # path = './static/petimg/' + petid + '.' + img.mimetype.split('/')[1]
         # img.save(path)
-
-        
+        if img == "" or img == None:
+            resMsg["code"] = 3
+            resMsg["msg"] = "You didn't add image"
+            return resMsg
         decodedImg = Image.open(io.BytesIO(img.read()))
         path = './static/petimg/' + petid + '.' + decodedImg.format
         print(decodedImg)
         decodedImg.save(path)
-        sql = "UPDATE pet SET petimg = '%s' WHERE petid = %s" % (path, petid)
+
+        # Convert image to bytes
+        image_bytes = decodedImg.tobytes()
+        # Encode bytes as base64 string
+        image_string = base64.b64encode(image_bytes).decode('utf-8')
+        print(image_string)
+
+        sql = "UPDATE pet SET petimg = '%s' WHERE petid = %s" % (image_string, petid)
         server.cur.execute(sql)
         server.db.commit()
         resMsg["code"] = 0
@@ -143,3 +165,4 @@ def uploadImg(petid, img):
         resMsg["code"] = code
         resMsg["msg"] = msg
         return resMsg
+

@@ -41,6 +41,7 @@ dependencies:
   flutter_secure_storage: ^8.0.0
   progress_state_button: ^1.0.4
   image_picker: ^0.8.7
+  carousel_slider: ^4.2.1
 
 dev_dependencies:
   flutter_test:

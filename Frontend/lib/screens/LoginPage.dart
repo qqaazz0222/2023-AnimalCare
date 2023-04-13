@@ -67,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
       }),
     );
     final responseJson = jsonDecode(response.body);
-
+    // print("This is responseJson from Login Page: $responseJson");
     switch (responseJson["code"]) {
       case 0:
         print(responseJson["msg"]);

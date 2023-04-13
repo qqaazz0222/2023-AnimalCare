@@ -1,5 +1,6 @@
 import 'package:animal_care_flutter_app/components/MyAppBar.dart';
 import 'package:animal_care_flutter_app/components/PetCard.dart';
+import 'package:animal_care_flutter_app/components/PetCardCarousel.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -25,9 +26,12 @@ class _HomePageState extends State<HomePage> {
                     MyAppBar(appbarSize: 140.0),
                     const Text("My Pet"),
                     Row(
-                      //TODO: Create Pet Card Carousel
                       children: [
-                        PetCard(),
+                        Container(
+                          child: PetCardCarousel(),
+                          height: 270,
+                          width: MediaQuery.of(context).size.width,
+                        )
                       ],
                     ),
                     const Text("건강체크 해볼까요"),

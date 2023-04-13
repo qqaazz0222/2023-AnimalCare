@@ -70,7 +70,7 @@ class _PetRegisterPageState extends State<PetRegisterPage> {
 
     if (responseJson["code"] == 0) {
 
-      final responseUploadImgCode = await uploadImage(imageGallery!, petUploadImgUrl, petId);
+      final responseUploadImgCode = await uploadImage(pickedImage!, petUploadImgUrl, petId);
       print("Response code: $responseUploadImgCode");
 
       if (responseUploadImgCode == 0){
@@ -83,29 +83,14 @@ class _PetRegisterPageState extends State<PetRegisterPage> {
     }
   }
 
-  File? imageGallery;
-
-  Future pickImageGallery() async {
+  File? pickedImage;
+  Future pickImage(source_) async {
     try {
-      final imageGallery =
-          await ImagePicker().pickImage(source: ImageSource.gallery);
-      if (imageGallery == null) return;
-      final imageTemp = File(imageGallery.path);
-      setState(() => this.imageGallery = imageTemp);
-    } on PlatformException catch (e) {
-      print('Failed to pick image: $e');
-    }
-  }
-
-  File? imageCamera;
-
-  Future pickImageCamera() async {
-    try {
-      final imageCamera =
-          await ImagePicker().pickImage(source: ImageSource.camera);
-      if (imageCamera == null) return;
-      final imageTemp = File(imageCamera.path);
-      setState(() => this.imageCamera = imageTemp);
+      final pickedImage =
+          await ImagePicker().pickImage(source: source_);
+      if (pickedImage == null) return;
+      final imageTemp = File(pickedImage.path);
+      setState(() => this.pickedImage = imageTemp);
     } on PlatformException catch (e) {
       print('Failed to pick image: $e');
     }
@@ -143,19 +128,19 @@ class _PetRegisterPageState extends State<PetRegisterPage> {
                         //TODO: Delete photo if clicked on the chosen photo
                         InkWell(
                           onTap: () {
-                            pickImageGallery();
+                            pickImage(ImageSource.gallery);
                           },
                           child: CircleAvatar(
                             backgroundColor: Colors.grey[200],
                             radius: 48,
-                            child: (imageGallery == null)
-                                ? Icon(Icons.camera_alt)
+                            child: (pickedImage == null)
+                                ? Icon(Icons.camera_alt, size: 30,)
                                 : ClipOval(
                                     child: SizedBox(
                                       height: 96,
                                       width: 96,
                                       child: Image.file(
-                                        imageGallery!,
+                                        pickedImage!,
                                         fit: BoxFit.cover,
                                       ),
                                     ),
