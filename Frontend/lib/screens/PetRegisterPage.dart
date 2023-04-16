@@ -52,6 +52,7 @@ class _PetRegisterPageState extends State<PetRegisterPage> {
     final petRegisterUrl = Uri.parse("${Server.serverUrl}/pet/register");
     final petUploadImgUrl = Uri.parse("${Server.serverUrl}/pet/uploadimg");
 
+    //TODO: Add dog breed
     final response = await http.post(petRegisterUrl,
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({

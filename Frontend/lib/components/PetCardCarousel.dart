@@ -71,10 +71,11 @@ class _PetCardCarouselState extends State<PetCardCarousel> {
         height: 270,
         child: Column(
           children: [
-            //TODO: Extract Pet data from the server
-            Image(image: AssetImage("assets/img/puppy.jpg"), width: 200, height: 200, fit: BoxFit.cover,),
-            Text(item[2]),
-            Text("Breed")
+            //TODO: Parse image from a bytecode format
+            // item[8] ??
+            Image(image: AssetImage("assets/img/no_image.png"), width: 200, height: 200, fit: BoxFit.cover,),
+            Text(item[1]),
+            Text(item[2]) //TODO: Change to dog breed
           ],
         ),
       ),

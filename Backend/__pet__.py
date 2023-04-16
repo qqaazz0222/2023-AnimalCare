@@ -148,13 +148,13 @@ def uploadImg(petid, img):
         print(decodedImg)
         decodedImg.save(path)
 
-        # Convert image to bytes
-        image_bytes = decodedImg.tobytes()
-        # Encode bytes as base64 string
-        image_string = base64.b64encode(image_bytes).decode('utf-8')
-        print(image_string)
+        # # Convert image to bytes
+        # image_bytes = decodedImg.tobytes()
+        # # Encode bytes as base64 string
+        # image_string = base64.b64encode(image_bytes).decode('utf-8')
+        # print(image_string)
 
-        sql = "UPDATE pet SET petimg = '%s' WHERE petid = %s" % (image_string, petid)
+        sql = "UPDATE pet SET petimg = '%s' WHERE petid = %s" % (path, petid)
         server.cur.execute(sql)
         server.db.commit()
         resMsg["code"] = 0

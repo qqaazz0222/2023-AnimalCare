@@ -130,7 +130,7 @@ def deleteAllPets():
 @cross_origin()
 def petUploadImg():
     print("I'm Here")
-    petid = request.form['petid']
+    petid = request.json['petid']
     img = request.files['img']
     print(img)
     return __pet__.uploadImg(petid, img)

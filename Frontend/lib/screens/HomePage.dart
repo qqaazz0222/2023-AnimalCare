@@ -15,7 +15,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.grey,
         body: CustomScrollView(
           slivers: [
             SliverFillRemaining(
@@ -148,7 +148,7 @@ class _HomePageState extends State<HomePage> {
                             clipBehavior: Clip.hardEdge,
                             child: Column(
                               children: [
-                                //TODO: get data from Database
+                                //TODO: get data from Database, but which pet's name if I have many pets?
                                 ListTile(
                                   title: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
