@@ -1,18 +1,18 @@
-import io
-import os
 from flask import Flask, jsonify, request, render_template
 from flask import make_response
 from flask_cors import CORS, cross_origin
 import pymysql
 import json
 from operator import itemgetter
+from cloudinary.uploader import upload
+from cloudinary.utils import cloudinary_url
+
 
 # Load Functions
 import __user__
 import __pet__
 import __log__
 # import __yolo__
-
 
 app = Flask(__name__)
 CORS(app)
@@ -100,7 +100,7 @@ def petGetListCountPets():
 @app.route('/pet/getinfo', methods=['POST'])
 @cross_origin()
 def petGetInfo():
-    petid = itemgetter('petid')(request.form)
+    petid = itemgetter('petid')(request.json)
     return __pet__.getInfo(petid)
 
 
@@ -158,8 +158,14 @@ def logGetInfo():
 @app.route('/log/healthcheck', methods=['POST'])
 @cross_origin()
 def logHealthCheck():
-    petid = request.json['petid']
-    img = request.files['img']
+
+    # petid = request.json['petid']
+    # img = request.files['img']
+
+    petid = request.form["petid"]
+    img = request.files["img"].read()
+
+    
     return __log__.healthCheck(petid, img)
 
 

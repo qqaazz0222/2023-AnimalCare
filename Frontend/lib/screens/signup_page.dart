@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:animal_care_flutter_app/screens/LoginPage.dart';
-import 'package:animal_care_flutter_app/screens/PetRegisterPage.dart';
+import 'package:animal_care_flutter_app/screens/login_page.dart';
+import 'package:animal_care_flutter_app/screens/pet_register_page.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -9,7 +9,6 @@ import 'package:progress_state_button/progress_button.dart';
 import 'package:http/http.dart' as http;
 
 import '../utils/AppConfig.dart';
-import 'HomePage.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({Key? key}) : super(key: key);

@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:animal_care_flutter_app/screens/HomePage.dart';
-import 'package:animal_care_flutter_app/screens/PetRegisterPage.dart';
-import 'package:animal_care_flutter_app/screens/SignupPage.dart';
+import 'package:animal_care_flutter_app/screens/home_page.dart';
+import 'package:animal_care_flutter_app/screens/pet_register_page.dart';
+import 'package:animal_care_flutter_app/screens/signup_page.dart';
 import 'package:animal_care_flutter_app/utils/AppConfig.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';

@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:animal_care_flutter_app/screens/HomePage.dart';
+import 'package:animal_care_flutter_app/screens/home_page.dart';
 import 'package:animal_care_flutter_app/utils/AppConfig.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -70,25 +70,24 @@ class _PetRegisterPageState extends State<PetRegisterPage> {
     petId = responseJson["petID"];
 
     if (responseJson["code"] == 0) {
-
       final responseUploadImgCode = await uploadImage(pickedImage!, petUploadImgUrl, petId);
       print("Response code: $responseUploadImgCode");
 
-      if (responseUploadImgCode == 0){
+      if (responseUploadImgCode == 0) {
         if (context.mounted) {
           context.push(HomePage.id);
         }
-      }else{
+      } else {
         print("Couldn't upload image");
       }
     }
   }
 
   File? pickedImage;
+
   Future pickImage(source_) async {
     try {
-      final pickedImage =
-          await ImagePicker().pickImage(source: source_);
+      final pickedImage = await ImagePicker().pickImage(source: source_);
       if (pickedImage == null) return;
       final imageTemp = File(pickedImage.path);
       setState(() => this.pickedImage = imageTemp);
@@ -135,7 +134,10 @@ class _PetRegisterPageState extends State<PetRegisterPage> {
                             backgroundColor: Colors.grey[200],
                             radius: 48,
                             child: (pickedImage == null)
-                                ? Icon(Icons.camera_alt, size: 30,)
+                                ? Icon(
+                                    Icons.camera_alt,
+                                    size: 30,
+                                  )
                                 : ClipOval(
                                     child: SizedBox(
                                       height: 96,
