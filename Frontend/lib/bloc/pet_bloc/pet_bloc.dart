@@ -44,7 +44,6 @@ class PetBloc extends Bloc<SelectPetEvent, PetState> {
     } else {
       throw Exception('Failed to fetch data');
     }
-    emit(state.copyWith(selectedPet: selectedPet));
-    emit(state.copyWith(isLoading: false));
+    emit(state.copyWith(selectedPet: selectedPet, isLoading: false));
   }
 }

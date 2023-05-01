@@ -1,9 +1,11 @@
+import 'dart:io';
+
 class HealthCheck {
   final int logId;
   final int logYear;
   final int logMonth;
   final int logDay;
-  final String? logImg;
+  final File logImg;
   final String logResult;
   final int petId;
 

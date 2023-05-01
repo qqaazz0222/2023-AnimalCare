@@ -11,6 +11,7 @@ import 'package:http_parser/http_parser.dart';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
+
 import '../../utils/AppConfig.dart';
 
 part 'health_check_event.dart';
@@ -22,18 +23,14 @@ class HealthCheckBloc extends Bloc<HealthCheckEvent, HealthCheckState> {
     }
 
     Future<void> _onUploadFecesHealthCheckEvent(UploadFecesHealthCheckEvent event, Emitter<HealthCheckState> emit) async {
-      emit(state.copyWith(isLoading: false));
-      const url = "${Server.serverUrl}/log/healthcheck";
+      // Set loading to true
+      emit(state.copyWith(isLoading: true));
+      const url = "${Server.serverUrl}/log";
+      // Initialize our HealthCheck class
       HealthCheck? healthCheckResults;
 
-      //TODO: Move credentials to another place
-      // final cloudinary = Cloudinary.signedConfig(
-      //   apiKey: "drmfizkit",
-      //   apiSecret: "171663269982453",
-      //   cloudName: "9bhs25W0dAFnlKeto1eok9rdWrg",
-      // );
-
-      var request = http.MultipartRequest('POST', Uri.parse(url));
+      // Post uploaded image to the API
+      var request = http.MultipartRequest('POST', Uri.parse("$url/healthcheck"));
       request.fields["petid"] = event.petId.toString();
       request.files.add(
           http.MultipartFile.fromBytes(
@@ -42,12 +39,49 @@ class HealthCheckBloc extends Bloc<HealthCheckEvent, HealthCheckState> {
             filename: event.img.path,
             contentType: MediaType('image', 'jpeg')
           ));
-      var response = await request.send();
-      if (response.statusCode == 200) {
+      // Get results as Streamed Response and convert to normal Response
+      var streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+
+      // Success
+      if (streamedResponse.statusCode == 200) {
         print('Image uploaded successfully!');
+        // Retrieve data from the response
+        final data = jsonDecode(response.body);
+
+        final year = data["year"];
+        final month = data["month"];
+        final day = data["day"];
+        final pResult = data["predictResult"];
+
+        // Create another POST to get results of the prediction
+        final response2 = await http.post(
+          Uri.parse("$url/getinfo"),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({
+            'petid': event.petId,
+            'year': year,
+            'month': month,
+            'day': day,
+          }),
+        );
+        if (response2.statusCode == 200) {
+          final data2 = jsonDecode(response2.body);
+          // define initialized HealthCheck
+          healthCheckResults = HealthCheck(
+              data2[0] as int,
+              year,
+              month,
+              day,
+              event.img,
+              pResult,
+              event.petId
+          );
+        }
       } else {
         print('Failed to upload image.');
       }
-      emit(state.copyWith(isLoading: true));
+      // Set results state and make isLoading "false"
+      emit(state.copyWith(healthCheckResults: healthCheckResults, isLoading: false));
     }
 }

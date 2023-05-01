@@ -14,12 +14,18 @@ resMsg = {
 }
 
 
-def getList(petid):
+def getList(petid, limit=0):
     try:
-        sql = "SELECT * FROM log WHERE petid = '%s'" % (petid)
-        server.cur.execute(sql)
-        result = server.cur.fetchall()
-        return jsonify(result)
+        if limit > 0:
+            sql = "SELECT * FROM log WHERE petid = '%s' ORDER BY `logid `" % (petid)
+            server.cur.execute(sql)
+            result = server.cur.fetchall()
+            return jsonify(result)
+        else:
+            sql = "SELECT * FROM log WHERE petid = '%s' ORDER BY `logid LIMIT %s`" % (petid, limit)
+            server.cur.execute(sql)
+            result = server.cur.fetchall()
+            return jsonify(result)
     except pymysql.err.IntegrityError as e:
         code, msg = e.args
         resMsg["code"] = code
@@ -29,8 +35,8 @@ def getList(petid):
 
 def getInfo(petid, year, month, day):
     try:
-        sql = "SELECT * FROM log WHERE petid = '%s' and logyear = %s and logmonth = %s and logday = %s" % (
-            petid, year, month, day)
+        sql = """SELECT `logid`, `logyear`, `logmonth`, `logday`, TO_BASE64(logimg), `logresult`, `petid` FROM log 
+        WHERE petid = '%s' and logyear = %s and logmonth = %s and logday = %s""" % (petid, year, month, day)
         server.cur.execute(sql)
         result = server.cur.fetchone()
         return jsonify(result)
@@ -53,6 +59,7 @@ def healthCheck(petid, img):
         my_img.save(path)
         # make a prediction of feces image
         pResult = __yolo__.predict(path)
+        print(pResult)
         # convert bytes image into base64 image to put into database
         img_base64 = base64.b64encode(img).decode('utf-8')
 
@@ -61,7 +68,9 @@ def healthCheck(petid, img):
         server.db.commit()
         resMsg["code"] = 0
         resMsg["msg"] = "Success!"
-        resMsg["date"] = '%d/%d/%d' % (year, month, day)
+        resMsg["year"] = year
+        resMsg["month"] = month
+        resMsg["day"] = day
         resMsg["img"] = img_base64
         resMsg["predictResult"] = pResult
         return jsonify(resMsg)
