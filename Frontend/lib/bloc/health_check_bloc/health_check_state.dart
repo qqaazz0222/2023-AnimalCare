@@ -14,7 +14,7 @@ class HealthCheckState {
   }) {
     return HealthCheckState(
         healthCheckResults: healthCheckResults ?? this.healthCheckResults,
-        lastHealthCheckResults: healthCheckResults ?? this.healthCheckResults,
+        lastHealthCheckResults: lastHealthCheckResults ?? this.lastHealthCheckResults,
         isLoading: isLoading);
   }
 }

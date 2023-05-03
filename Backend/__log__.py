@@ -18,11 +18,9 @@ def getList(petid, limit=0):
     try:
         if limit > 0:
             sql = """SELECT `logid`, `logyear`, `logmonth`, `logday`, TO_BASE64(logimg), `logresult`, `petid` 
-            FROM log WHERE petid = '%s' ORDER BY `logid` DESC LIMIT %s""" % (petid, limit)
+            FROM log WHERE petid = %s ORDER BY `logid` DESC LIMIT %s""" % (petid, limit)
             server.cur.execute(sql)
             result = server.cur.fetchall()
-            print(sql)
-            print(result)
             return jsonify(result)
         else:
             sql = """SELECT `logid`, `logyear`, `logmonth`, `logday`, TO_BASE64(logimg), `logresult`, `petid` 

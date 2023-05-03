@@ -4,25 +4,27 @@ import 'package:animal_care_flutter_app/bloc/health_check_bloc/health_check_bloc
 import 'package:animal_care_flutter_app/components/MyAppBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../bloc/pet_bloc/pet_bloc.dart';
+import '../utils/pickImageFeces.dart';
 
 class FecesDiagnosisPage extends StatelessWidget {
   const FecesDiagnosisPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var pResult;
+    String? pResult;
     final petBloc = BlocProvider.of<PetBloc>(context);
     final fecesBloc = BlocProvider.of<HealthCheckBloc>(context);
+    //? Wrapping everything with petBloc and fecesBloc builders
     return BlocBuilder<PetBloc, PetState>(
       bloc: petBloc,
       builder: (petContext, petState) {
         return BlocBuilder<HealthCheckBloc, HealthCheckState>(
           bloc: fecesBloc,
           builder: (fecesContext, fecesState) {
-            print(fecesState.isLoading);
-            pResult = fecesState.healthCheckResults?.logResult;
+            pResult = fecesState.lastHealthCheckResults?.logResult;
             return Scaffold(
               backgroundColor: Colors.grey,
               appBar: MyAppBar(
@@ -32,6 +34,7 @@ class FecesDiagnosisPage extends StatelessWidget {
               body: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  //! Title
                   const Text(
                     "배변 케어",
                     style: TextStyle(fontSize: 32),
@@ -40,11 +43,14 @@ class FecesDiagnosisPage extends StatelessWidget {
                   Center(
                     child: Column(
                       children: [
+                        //! Subtitle
                         const Text(
                           "대변 상태는 정상에 가까워요!",
                           style: TextStyle(fontSize: 24),
                         ),
+                        //! Show this when data is loaded
                         if (!fecesState.isLoading) ...[
+                          //! The Image uploaded for prediction
                           Container(
                             height: 224,
                             width: 224,
@@ -52,12 +58,13 @@ class FecesDiagnosisPage extends StatelessWidget {
                               image: DecorationImage(
                                 fit: BoxFit.fitWidth,
                                 image: FileImage(
-                                  fecesState.healthCheckResults!.logImg,
+                                  fecesState.lastHealthCheckResults!.logImg,
                                 ),
                               )
                             ),
                           ),
-                          SizedBox(height: 12,),
+                          const SizedBox(height: 12,),
+                          //! Prediction results
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
@@ -78,6 +85,7 @@ class FecesDiagnosisPage extends StatelessWidget {
                               ),
                             ],
                           ),
+                          //! Prediction comments
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Container(
@@ -87,10 +95,21 @@ class FecesDiagnosisPage extends StatelessWidget {
                                 style: TextStyle(fontSize: 18),)
                                   : Text("배변에 점액이 섞인 변일 수도 있어요. 변에 점액이 눈에 보일 정도로 섞여 있다면, 대장등에 문제가 있을 수도 있어요! 점액이 섞인 변을 2-3회 이상 본다면 병원진료를 받아보는것을 추천드려요.",
                                 style: TextStyle(fontSize: 18),),
-
                             ),
-                          )
+                          ),
+                          const SizedBox(
+                            height: 24,
+                          ),
+                          //! Allow Users to create a new record
+                          Center(
+                            child: ElevatedButton(
+                                onPressed: () async {
+                                  await pickImage(ImageSource.gallery, fecesBloc, petState);
+                                },
+                                child: const Text("촬영하기!")),
+                          ),
                         ]
+                          //! Show this when data is NOT loaded
                         else ...[
                           Text("Loading"),
                           Image.asset("assets/img/no_image.png"),
