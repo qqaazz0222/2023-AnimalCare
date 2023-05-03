@@ -17,12 +17,16 @@ resMsg = {
 def getList(petid, limit=0):
     try:
         if limit > 0:
-            sql = "SELECT * FROM log WHERE petid = '%s' ORDER BY `logid `" % (petid)
+            sql = """SELECT `logid`, `logyear`, `logmonth`, `logday`, TO_BASE64(logimg), `logresult`, `petid` 
+            FROM log WHERE petid = '%s' ORDER BY `logid` DESC LIMIT %s""" % (petid, limit)
             server.cur.execute(sql)
             result = server.cur.fetchall()
+            print(sql)
+            print(result)
             return jsonify(result)
         else:
-            sql = "SELECT * FROM log WHERE petid = '%s' ORDER BY `logid LIMIT %s`" % (petid, limit)
+            sql = """SELECT `logid`, `logyear`, `logmonth`, `logday`, TO_BASE64(logimg), `logresult`, `petid` 
+            FROM log WHERE petid = '%s' ORDER BY `logid`""" % (petid)
             server.cur.execute(sql)
             result = server.cur.fetchall()
             return jsonify(result)
@@ -59,7 +63,7 @@ def healthCheck(petid, img):
         my_img.save(path)
         # make a prediction of feces image
         pResult = __yolo__.predict(path)
-        print(pResult)
+        # print(pResult)
         # convert bytes image into base64 image to put into database
         img_base64 = base64.b64encode(img).decode('utf-8')
 

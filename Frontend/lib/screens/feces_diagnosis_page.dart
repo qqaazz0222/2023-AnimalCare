@@ -21,6 +21,7 @@ class FecesDiagnosisPage extends StatelessWidget {
         return BlocBuilder<HealthCheckBloc, HealthCheckState>(
           bloc: fecesBloc,
           builder: (fecesContext, fecesState) {
+            print(fecesState.isLoading);
             pResult = fecesState.healthCheckResults?.logResult;
             return Scaffold(
               backgroundColor: Colors.grey,

@@ -8,9 +8,10 @@ class UploadFecesHealthCheckEvent extends HealthCheckEvent{
   final File img;
 
   UploadFecesHealthCheckEvent(this.petId, this.img);
-  // UploadFecesHealthCheckEvent(this.petId);
 }
 
 class GetLastHealthCheckEvent extends HealthCheckEvent{
+  final int petId;
 
+  GetLastHealthCheckEvent(this.petId);
 }

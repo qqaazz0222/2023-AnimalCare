@@ -129,10 +129,9 @@ def deleteAllPets():
 @app.route('/pet/uploadimg', methods=['POST'])
 @cross_origin()
 def petUploadImg():
-    print("I'm Here")
     petid = request.json['petid']
     img = request.files['img']
-    print(img)
+    # print(img)
     return __pet__.uploadImg(petid, img)
 
 # -----------------------------------------------------------------
@@ -144,7 +143,8 @@ def petUploadImg():
 @cross_origin()
 def logGetList():
     petid = itemgetter('petid')(request.json)
-    return __log__.getList(petid)
+    limit = itemgetter('limit')(request.json)
+    return __log__.getList(petid, limit)
 
 
 @app.route('/log/getinfo', methods=['POST'])

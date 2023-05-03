@@ -5,7 +5,6 @@ class HealthCheckState {
   final HealthCheck? lastHealthCheckResults;
   final bool isLoading;
 
-  // HealthCheckState({this.healthCheckResults, this.lastHealthCheckResults, this.isLoading = false});
   HealthCheckState({this.healthCheckResults, this.lastHealthCheckResults, this.isLoading = false});
 
   HealthCheckState copyWith({
