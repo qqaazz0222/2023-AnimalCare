@@ -21,12 +21,20 @@ def getList(petid, limit=0):
             FROM log WHERE petid = %s ORDER BY `logid` DESC LIMIT %s""" % (petid, limit)
             server.cur.execute(sql)
             result = server.cur.fetchall()
+            try: 
+                print("Get limited list:", result[0][:4]+result[:][5:])
+            except:
+                print("No records limited list")
             return jsonify(result)
         else:
             sql = """SELECT `logid`, `logyear`, `logmonth`, `logday`, TO_BASE64(logimg), `logresult`, `petid` 
             FROM log WHERE petid = '%s' ORDER BY `logid`""" % (petid)
             server.cur.execute(sql)
             result = server.cur.fetchall()
+            try:
+                print("Get whole list:", result[:][:4]+result[:][5:])
+            except:
+                print("No records whole list")
             return jsonify(result)
     except pymysql.err.IntegrityError as e:
         code, msg = e.args

@@ -37,6 +37,7 @@ def web():
 @app.route('/user/signin', methods=['POST'])
 @cross_origin()
 def userSignIn():
+    db.ping()
     uid, upw = itemgetter('uid', 'upw')(request.json)
     return __user__.signIn(uid, upw)
 
@@ -44,6 +45,7 @@ def userSignIn():
 @app.route('/user/signup', methods=['POST'])
 @cross_origin()
 def userSignUp():
+    db.ping()
     uid, upw, uname, uemail = itemgetter(
         'uid', 'upw', 'uname', 'uemail')(request.json)
     return __user__.signUp(uid, upw, uname, uemail)
@@ -59,6 +61,7 @@ def userGetInfo():
 @app.route('/user/modify', methods=['POST'])
 @cross_origin()
 def userModify():
+    db.ping()
     uid, upw, uname, uemail = itemgetter(
         'uid', 'upw', 'uname', 'uemail')(request.json)
     return __user__.modify(uid, upw, uname, uemail)
@@ -67,6 +70,7 @@ def userModify():
 @app.route('/user/uploadimg', methods=['POST'])
 @cross_origin()
 def userUploadImg():
+    db.ping()
     uid = request.form['uid']
     img = request.files['img']
     return __user__.uploadImg(uid, img)
@@ -79,6 +83,7 @@ def userUploadImg():
 @app.route('/pet/register', methods=['POST'])
 @cross_origin()
 def petRegister():
+    db.ping()
     petName, petSex, petBirthYear, petBirthMonth, petAdoptYear, petAdoptMonth, petWeight, uid = itemgetter(
         'petName', 'petSex', 'petBirthYear', 'petBirthMonth', 'petAdoptYear', 'petAdoptMonth', 'petWeight', 'uid')(request.json)
     return __pet__.register(petName, petSex, petBirthYear, petBirthMonth, petAdoptYear, petAdoptMonth, petWeight, uid)
@@ -87,12 +92,14 @@ def petRegister():
 @app.route('/pet/getlist', methods=['POST'])
 @cross_origin()
 def petGetList():
+    db.ping()
     uid = itemgetter('uid')(request.json)
     return __pet__.getList(uid)
 
 @app.route('/pet/getlist/countpets', methods=['POST'])
 @cross_origin()
 def petGetListCountPets():
+    db.ping()
     uid = itemgetter('uid')(request.json)
     return __pet__.getListCountPets(uid)
 
@@ -100,6 +107,7 @@ def petGetListCountPets():
 @app.route('/pet/getinfo', methods=['POST'])
 @cross_origin()
 def petGetInfo():
+    db.ping()
     petid = itemgetter('petid')(request.json)
     return __pet__.getInfo(petid)
 
@@ -107,6 +115,7 @@ def petGetInfo():
 @app.route('/pet/modify', methods=['POST'])
 @cross_origin()
 def petModify():
+    db.ping()
     petid, petName, petSex, petBirthYear, petBirthMonth, petAdoptYear, petAdoptMonth, petWeight, uid = itemgetter(
         'petid', 'petName', 'petSex', 'petBirthYear', 'petBirthMonth', 'petAdoptYear', 'petAdoptMonth', 'petWeight', 'uid')(request.json)
     return __pet__.modify(petid, petName, petSex, petBirthYear, petBirthMonth, petAdoptYear, petAdoptMonth, petWeight, uid)
@@ -115,6 +124,7 @@ def petModify():
 @app.route('/pet/delinfo', methods=['POST'])
 @cross_origin()
 def petDelInfo():
+    db.ping()
     petid = itemgetter('petid')(request.json)
     return __pet__.delinfo(petid)
 
@@ -122,6 +132,7 @@ def petDelInfo():
 @app.route('/pet/delall', methods=['POST'])
 @cross_origin()
 def deleteAllPets():
+    db.ping()
     uid = itemgetter('uid')(request.form)
     return __pet__.deleteAllPets(uid)
 
@@ -129,6 +140,7 @@ def deleteAllPets():
 @app.route('/pet/uploadimg', methods=['POST'])
 @cross_origin()
 def petUploadImg():
+    db.ping()
     petid = request.json['petid']
     img = request.files['img']
     # print(img)
@@ -142,6 +154,7 @@ def petUploadImg():
 @app.route('/log/getlist', methods=['POST'])
 @cross_origin()
 def logGetList():
+    db.ping()
     petid = itemgetter('petid')(request.json)
     limit = itemgetter('limit')(request.json)
     return __log__.getList(petid, limit)
@@ -150,6 +163,7 @@ def logGetList():
 @app.route('/log/getinfo', methods=['POST'])
 @cross_origin()
 def logGetInfo():
+    db.ping()
     petid, year, month, day = itemgetter(
         'petid', 'year', 'month', 'day')(request.json)
     return __log__.getInfo(petid, year, month, day)
@@ -158,6 +172,7 @@ def logGetInfo():
 @app.route('/log/healthcheck', methods=['POST'])
 @cross_origin()
 def logHealthCheck():
+    db.ping()
 
     # petid = request.json['petid']
     # img = request.files['img']

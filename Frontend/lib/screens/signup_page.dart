@@ -79,12 +79,12 @@ class _SignupPageState extends State<SignupPage> {
   Widget build(BuildContext context) {
     // Scaffold - basic layout with FAB
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text(
           "Signup Page",
         ),
-        backgroundColor: Colors.green[400],
+        backgroundColor: Theme.of(context).primaryColor,
       ),
       body: CustomScrollView(
         slivers: [
@@ -92,7 +92,7 @@ class _SignupPageState extends State<SignupPage> {
             hasScrollBody: false,
             child: Container(
               margin: EdgeInsets.all(24),
-              color: Colors.white,
+              color: Theme.of(context).scaffoldBackgroundColor,
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -112,9 +112,9 @@ class _SignupPageState extends State<SignupPage> {
                           const Text("건강한 견생의 일상"),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
+                            children: [
                               Text("푸푸케어",
-                                  style: TextStyle(color: Colors.greenAccent)),
+                                  style: TextStyle(color: Theme.of(context).primaryColor)),
                               Text("에서 함께 해주세요")
                             ],
                           )
@@ -222,35 +222,35 @@ class _SignupPageState extends State<SignupPage> {
                           Container(
                             width: double.infinity,
                             child: ProgressButton(
-                              stateWidgets: const {
+                              stateWidgets: {
                                 ButtonState.idle: Text(
                                   "Sign Up",
                                   style: TextStyle(
-                                      color: Colors.white,
+                                      color: Theme.of(context).scaffoldBackgroundColor,
                                       fontWeight: FontWeight.w500),
                                 ),
                                 ButtonState.loading: Text(
                                   "Loading",
                                   style: TextStyle(
-                                      color: Colors.white,
+                                      color: Theme.of(context).scaffoldBackgroundColor,
                                       fontWeight: FontWeight.w500),
                                 ),
                                 // Do not use
                                 ButtonState.fail: Text(
                                   "Fail",
                                   style: TextStyle(
-                                      color: Colors.white,
+                                      color: Theme.of(context).scaffoldBackgroundColor,
                                       fontWeight: FontWeight.w500),
                                 ),
                                 ButtonState.success: Text(
                                   "Success",
                                   style: TextStyle(
-                                      color: Colors.white,
+                                      color: Theme.of(context).scaffoldBackgroundColor,
                                       fontWeight: FontWeight.w500),
                                 )
                               },
                               stateColors: {
-                                ButtonState.idle: Colors.green.shade400,
+                                ButtonState.idle: Theme.of(context).primaryColor,
                                 ButtonState.loading: Colors.grey.shade400,
 
                                 // Do not use
@@ -293,7 +293,7 @@ class _SignupPageState extends State<SignupPage> {
                           Text.rich(TextSpan(children: [
                             const TextSpan(text: "이미 가입하셨나요? "),
                             TextSpan(
-                                style: const TextStyle(color: Colors.grey),
+                                style: TextStyle(color: Theme.of(context).disabledColor),
                                 text: "로그인하기",
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {

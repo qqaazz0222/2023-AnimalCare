@@ -18,7 +18,7 @@ class PetBloc extends Bloc<SelectPetEvent, PetState> {
     emit(state.copyWith(isLoading: false));
     final uri = Uri.parse("${Server.serverUrl}/pet/getinfo");
     Pet? selectedPet;
-    print(event.petId);
+    print("PetBloc: Selected Pet: ${event.petId}");
     final response = await http.post(
       uri,
       headers: {'Content-Type': 'application/json'},

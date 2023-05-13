@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:animal_care_flutter_app/bloc/pet_bloc/pet_bloc.dart';
 import 'package:animal_care_flutter_app/components/MyAppBar.dart';
+import 'package:animal_care_flutter_app/models/health_check.dart';
 import 'package:animal_care_flutter_app/screens/feces_care_page.dart';
 import 'package:animal_care_flutter_app/screens/feces_diagnosis_page.dart';
 import 'package:flutter/material.dart';
@@ -8,12 +11,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/health_check_bloc/health_check_bloc.dart';
 import '../components/care_card.dart';
 
-class PetPage extends StatelessWidget {
+class PetPage extends StatefulWidget {
   const PetPage({Key? key}) : super(key: key);
 
   @override
+  State<PetPage> createState() => _PetPageState();
+}
+
+class _PetPageState extends State<PetPage> {
+  @override
   Widget build(BuildContext context) {
-    bool isOnThisPage = true;
     //? Initialize new fecesBloc and get petBloc from the previous page
     final petBloc = BlocProvider.of<PetBloc>(context);
     final fecesBloc = HealthCheckBloc();
@@ -82,63 +89,56 @@ class PetPage extends StatelessWidget {
                                 children: [
                                   //TODO: Get card status from database
                                   //? Using BlocListener to receive updates when changes happen
-                                  BlocListener<HealthCheckBloc,
-                                      HealthCheckState>(
-                                    //? Restrict reading updates when on the different page
-                                    listenWhen: (previousState, currentState) {
-                                      return isOnThisPage;
-                                    },
-                                    listener: (fecesContext, fecesState) {
-                                      //? Navigate to FecesCarePage when no updates found
-                                      // print("Last Health Check Results: ${fecesState.lastHealthCheckResults}");
-                                      // print("Is Loading: ${fecesState.isLoading}");
-                                      if (fecesState.lastHealthCheckResults == null && fecesState.isLoading == false) {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (_) => MultiBlocProvider(
-                                              providers: [
-                                                BlocProvider.value(
-                                                    value: petBloc),
-                                                BlocProvider.value(
-                                                    value: fecesBloc),
-                                              ],
-                                              child: FecesCarePage(),
-                                            ),
-                                          ),
-                                        );
-                                        isOnThisPage = false;
-                                      }
-                                      //? Once getting data from the database move to FecesDiagnosisPage with latest record
-                                      if ((fecesState.lastHealthCheckResults != null && fecesState.isLoading == false)) {
-                                        print("PetPage: There are some records");
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (_) => MultiBlocProvider(
-                                                providers: [
-                                                  BlocProvider.value(
-                                                      value: petBloc),
-                                                  BlocProvider.value(
-                                                      value: fecesBloc),
-                                                ],
-                                                child: FecesDiagnosisPage(),
-                                              ),
-                                            ));
-                                        //? Needed for ignoring changes in different page
-                                        isOnThisPage = false;
-                                      }
-                                    },
-                                    child: InkWell(
-                                        onTap: () {
-                                          //? Getting the latest health check record
+                                  BlocBuilder<HealthCheckBloc, HealthCheckState>(
+                                    builder: (fecesContext, fecesState) {
+                                      return InkWell(
+                                        onTap: () async {
                                           fecesBloc.add(GetLastHealthCheckEvent(petState.selectedPet!.petId));
+                                          late StreamSubscription<HealthCheckState> fecesStateSubscription;
+                                          fecesStateSubscription = fecesBloc.stream.listen((fecesState) {
+                                            if (fecesState.lastHealthCheckResults == null && !fecesState.isLoading) {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (_) => MultiBlocProvider(
+                                                    providers: [
+                                                      BlocProvider.value(value: petBloc),
+                                                      BlocProvider.value(value: fecesBloc),
+                                                    ],
+                                                    child: FecesCarePage(),
+                                                  ),
+                                                ),
+                                              );
+                                              // Cancel the subscription to avoid memory leaks
+                                              fecesStateSubscription.cancel();
+                                            } else if (fecesState.lastHealthCheckResults != null && !fecesState.isLoading) {
+                                              print("PetPage: There are some records");
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (_) => MultiBlocProvider(
+                                                    providers: [
+                                                      BlocProvider.value(value: petBloc),
+                                                      BlocProvider.value(value: fecesBloc),
+                                                    ],
+                                                    child: FecesDiagnosisPage(),
+                                                  ),
+                                                ),
+                                              );
+                                              // Cancel the subscription to avoid memory leaks
+                                              fecesStateSubscription.cancel();
+                                            }
+                                          });
+
                                         },
                                         child: const CareCard(
                                           careCardTitle: "건강케어",
                                           careCardSubtitle: "배변사진 체크기록이 없어요",
                                           careCardStatus: false,
-                                        )),
+                                        ),
+                                      );
+
+                                    },
                                   ),
                                   //TODO: add Navigation for other buttons
                                   const CareCard(

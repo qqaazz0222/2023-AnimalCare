@@ -70,11 +70,9 @@ class _LoginPageState extends State<LoginPage> {
     // print("This is responseJson from Login Page: $responseJson");
     switch (responseJson["code"]) {
       case 0:
-        print(responseJson["msg"]);
         await _secureStorage.setUserName(
             _usernameController.text); // Add UserID into Secure Storage
         final count = await _petGetListCount(); // Get the number of pets for entered user
-        print(count);
         if (context.mounted) {
           if (count == 0) {
             context.push(PetRegisterPage.id); // Move to Pet Registration
@@ -104,12 +102,10 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     // Scaffold - basic layout with FAB
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
-        title: const Text(
-          "Login Page",
-        ),
-        backgroundColor: Colors.green[400],
+        backgroundColor: Theme.of(context).colorScheme.background,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
       ),
       body: CustomScrollView(
         slivers: [
@@ -118,7 +114,7 @@ class _LoginPageState extends State<LoginPage> {
             child: Container(
                 //TODO: Add Global margins
                 margin: EdgeInsets.all(24),
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.background,
                 child: Center(
                   child: Form(
                     key: _formKey,
@@ -137,14 +133,22 @@ class _LoginPageState extends State<LoginPage> {
                                 height: 200,
                                 width: 200,
                               ),
-                              const Text("건강한 견생의 일상"),
+                              Text("건강한 견생의 일상", style: TextStyle(
+                                color: Theme.of(context).colorScheme.onBackground,
+                                fontSize: Theme.of(context).textTheme.headlineSmall?.fontSize
+                              ),),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
+                                children: [
                                   Text("푸푸케어",
-                                      style:
-                                          TextStyle(color: Colors.greenAccent)),
-                                  Text("에서 함께 해주세요")
+                                      style: TextStyle(
+                                        color: Theme.of(context).colorScheme.primary,
+                                        fontSize: Theme.of(context).textTheme.headlineSmall?.fontSize
+                                      )),
+                                  Text("에서 함께 해주세요", style: TextStyle(
+                                      color: Theme.of(context).colorScheme.onBackground,
+                                      fontSize: Theme.of(context).textTheme.headlineSmall?.fontSize
+                                  ),)
                                 ],
                               )
                             ],
@@ -196,12 +200,14 @@ class _LoginPageState extends State<LoginPage> {
                               Container(
                                 width: double.infinity,
                                 child: ProgressButton(
-                                  stateWidgets: const {
+                                  stateWidgets: {
                                     ButtonState.idle: Text(
                                       "Continue",
                                       style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w500),
+                                        color: Theme.of(context).colorScheme.onPrimary,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: Theme.of(context).textTheme.bodyLarge?.fontSize
+                                      ),
                                     ),
                                     ButtonState.loading: Text(
                                       "Loading",
@@ -224,7 +230,7 @@ class _LoginPageState extends State<LoginPage> {
                                     )
                                   },
                                   stateColors: {
-                                    ButtonState.idle: Colors.green.shade400,
+                                    ButtonState.idle: Theme.of(context).primaryColor,
                                     ButtonState.loading: Colors.grey.shade400,
 
                                     // Do not use
@@ -232,8 +238,8 @@ class _LoginPageState extends State<LoginPage> {
                                     ButtonState.success: Colors.green.shade400,
                                   },
                                   onPressed: () async {
-                                    print(_usernameController.text);
-                                    print(_passwordController.text);
+                                    // print(_usernameController.text);
+                                    // print(_passwordController.text);
                                     _handleLogin();
                                   },
                                   state: _isLoading

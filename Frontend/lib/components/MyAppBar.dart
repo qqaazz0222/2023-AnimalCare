@@ -17,6 +17,12 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
         return AppBar(
           backgroundColor: Colors.white,
           automaticallyImplyLeading: false,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () => {
+              Navigator.of(context).pop()},
+            color: Colors.black,
+          ),
           toolbarHeight: appbarSize,
           elevation: 0,
           shadowColor: Colors.white,

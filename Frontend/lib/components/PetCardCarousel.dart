@@ -1,3 +1,4 @@
+import 'package:animal_care_flutter_app/bloc/health_check_bloc/health_check_bloc.dart';
 import 'package:animal_care_flutter_app/bloc/pet_bloc/pet_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -8,10 +9,18 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:animal_care_flutter_app/utils/AppConfig.dart';
 import '../screens/pet_page.dart';
 
-class PetCardCarousel extends StatelessWidget {
+class PetCardCarousel extends StatefulWidget {
   final PetBloc petBloc;
+  final HealthCheckBloc fecesBloc;
 
-  const PetCardCarousel({Key? key, required this.petBloc,}) : super(key: key);
+  const PetCardCarousel({Key? key, required this.petBloc, required this.fecesBloc}) : super(key: key);
+
+  @override
+  State<PetCardCarousel> createState() => _PetCardCarouselState();
+}
+
+class _PetCardCarouselState extends State<PetCardCarousel> {
+  List<dynamic> currentPet = [];
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +35,17 @@ class PetCardCarousel extends StatelessWidget {
           'uid': await secureStorage.getUserName() ?? '',
         }),
       );
+      final data = jsonDecode(response.body);
       if (response.statusCode == 200) {
-        return jsonDecode(response.body);
+        //? Set Current Pet
+        if (currentPet.isEmpty){
+          currentPet = data[0];
+        }
+        widget.petBloc.add(SelectPetEvent(currentPet[0]));
+        // widget.fecesBloc.add(GetLastHealthCheckEvent(0));
+        // print("PetCardCarousel: ${widget.petBloc.state.selectedPet?.petId}");
+        // print("PetCardCarousel: $currentPet");
+        return data;
       } else {
         throw Exception('Failed to fetch data');
       }
@@ -40,12 +58,12 @@ class PetCardCarousel extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (_) => BlocProvider.value(
-                        value: petBloc,
+                        value: widget.petBloc,
                         child: PetPage(),
               ),
             ),
           );
-          petBloc.add(SelectPetEvent(item[0]));
+          widget.petBloc.add(SelectPetEvent(item[0]));
         },
         child: Card(
           shape: RoundedRectangleBorder(
@@ -79,10 +97,15 @@ class PetCardCarousel extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final data = snapshot.data!;
-
           return CarouselSlider(
             items: data.map((item) => buildCard(item)).toList(),
             options: CarouselOptions(
+              //? Allows us to select focused card
+              onPageChanged: (index, reason){
+                setState(() {
+                  currentPet = data[index];
+                });
+              },
               height: 400,
               enableInfiniteScroll: false,
               enlargeCenterPage: false,

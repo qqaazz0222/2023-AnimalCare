@@ -78,13 +78,12 @@ class HealthCheckBloc extends Bloc<HealthCheckEvent, HealthCheckState> {
     //? Set results state and make isLoading "false"
     emit(state.copyWith(
         lastHealthCheckResults: healthCheckResults,
-        healthCheckResults: healthCheckResults,
+        // healthCheckResults: healthCheckResults,
         isLoading: false));
   }
 
   //? Getting the last HealthCheck results
-  Future<void> _onGetLastHealthCheckEvent(
-    GetLastHealthCheckEvent event, Emitter<HealthCheckState> emit) async {
+  Future<void> _onGetLastHealthCheckEvent(GetLastHealthCheckEvent event, Emitter<HealthCheckState> emit) async {
       emit(state.copyWith(isLoading: true));
       const url = "${Server.serverUrl}/log";
       HealthCheck? lastHealthCheckResults;
@@ -99,9 +98,10 @@ class HealthCheckBloc extends Bloc<HealthCheckEvent, HealthCheckState> {
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         if (data.isEmpty) {
-          print("No records yet");
+          print("HealthCheckBloc: No Records yet");
           lastHealthCheckResults = null;
         } else {
+          print("HealthCheckBloc: There Are some records");
           //? Decode base64 image and save to the app directory
           final buffer = base64.decode(data[0][4].replaceAll(RegExp(r'\s+'), ''));
           String dir = (await getApplicationDocumentsDirectory()).path;
@@ -117,5 +117,6 @@ class HealthCheckBloc extends Bloc<HealthCheckEvent, HealthCheckState> {
       }
       //? Update lastHealthCheckResults with the new one
       emit(state.copyWith(lastHealthCheckResults: lastHealthCheckResults, isLoading: false));
+      print("Feces Bloc: New Last HC Results: ${state.lastHealthCheckResults?.petId}");
   }
 }
