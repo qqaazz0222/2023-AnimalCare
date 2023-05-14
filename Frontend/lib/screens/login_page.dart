@@ -143,7 +143,8 @@ class _LoginPageState extends State<LoginPage> {
                                   Text("푸푸케어",
                                       style: TextStyle(
                                         color: Theme.of(context).colorScheme.primary,
-                                        fontSize: Theme.of(context).textTheme.headlineSmall?.fontSize
+                                        fontSize: Theme.of(context).textTheme.headlineSmall?.fontSize,
+                                        fontWeight: FontWeight.bold
                                       )),
                                   Text("에서 함께 해주세요", style: TextStyle(
                                       color: Theme.of(context).colorScheme.onBackground,
