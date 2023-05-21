@@ -11,7 +11,7 @@ import 'package:progress_state_button/progress_button.dart';
 import '../bloc/health_check_bloc/health_check_bloc.dart';
 import '../bloc/pet_bloc/pet_bloc.dart';
 import '../components/MyAppBar.dart';
-import '../utils/pickImageFeces.dart';
+import '../utils/imagePickers.dart';
 
 class FecesCarePage extends StatelessWidget {
   const FecesCarePage({Key? key}) : super(key: key);
@@ -47,8 +47,10 @@ class FecesCarePage extends StatelessWidget {
               return Scaffold(
                 backgroundColor: Colors.grey,
                 appBar: MyAppBar(
-                    appbarSize: 140,
-                    petName: petState.selectedPet?.petName ?? "Your Pet"),
+                  appbarSize: 140,
+                  petName: petState.selectedPet?.petName ?? "Your Pet",
+                  petImg: petState.selectedPet?.petImg
+                ),
                 body: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,7 +107,7 @@ class FecesCarePage extends StatelessWidget {
                     Center(
                       child: ElevatedButton(
                           onPressed: () async {
-                            pickedImage = await pickImage(
+                            pickedImage = await pickImageFeces(
                                 ImageSource.gallery, fecesBloc, petState);
                           },
                           child: const Text("촬영하기!")),

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:http_parser/http_parser.dart';
 import 'package:animal_care_flutter_app/screens/home_page.dart';
 import 'package:animal_care_flutter_app/utils/AppConfig.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
 import '../utils/UploadImage.dart';
+import '../utils/imagePickers.dart';
 
 class PetRegisterPage extends StatefulWidget {
   const PetRegisterPage({Key? key}) : super(key: key);
@@ -19,6 +21,7 @@ class PetRegisterPage extends StatefulWidget {
   State<PetRegisterPage> createState() => _PetRegisterPageState();
 }
 
+//TODO: Move everything to PetBloc
 class _PetRegisterPageState extends State<PetRegisterPage> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
@@ -27,8 +30,9 @@ class _PetRegisterPageState extends State<PetRegisterPage> {
   final _adoptionDateController = TextEditingController();
   final _weightController = TextEditingController();
   final _secureStorage = SecureStorage();
+  File? pickedImage;
 
-  // Function to select date from 1900 until today
+  //? Function to select date from 1900 until today
   Future<void> _selectDate(
       BuildContext context, TextEditingController myDateController) async {
     final DateTime? picked = await showDatePicker(
@@ -49,41 +53,73 @@ class _PetRegisterPageState extends State<PetRegisterPage> {
   Future<void> _sendDataToApi() async {
     int? petId;
 
+    ByteData imageData = await rootBundle.load('assets/img/no_image.png');
+    List<int> bytes = imageData.buffer.asUint8List();
+
     final petRegisterUrl = Uri.parse("${Server.serverUrl}/pet/register");
-    final petUploadImgUrl = Uri.parse("${Server.serverUrl}/pet/uploadimg");
+    // final petUploadImgUrl = Uri.parse("${Server.serverUrl}/pet/uploadimg");
 
-    //TODO: Add dog breed
-    final response = await http.post(petRegisterUrl,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'petName': _nameController.text,
-          'petSex': _gender,
-          'petBirthYear': _birthdayController.text.substring(0, 4),
-          'petBirthMonth': _birthdayController.text.substring(5),
-          'petAdoptYear': _adoptionDateController.text.substring(0, 4),
-          'petAdoptMonth': _adoptionDateController.text.substring(5),
-          'petWeight': _weightController.text,
-          'uid': await _secureStorage.getUserName() ?? '',
-        }));
+    var request = http.MultipartRequest('POST', Uri.parse("$petRegisterUrl"));
+    request.fields["petName"] = _nameController.text;
+    request.fields["petSex"] = _gender!;
+    request.fields["petBirthYear"] = _birthdayController.text.substring(0, 4);
+    request.fields["petBirthMonth"] = _birthdayController.text.substring(5);
+    request.fields["petAdoptYear"] = _adoptionDateController.text.substring(0, 4);
+    request.fields["petAdoptMonth"] = _adoptionDateController.text.substring(5);
+    request.fields["petWeight"] = _weightController.text;
+    request.files.add(http.MultipartFile.fromBytes(
+        "img", bytes, filename: "no_image",
+        contentType: MediaType('image', 'png')));
+    request.fields["uid"] = await _secureStorage.getUserName() ?? '';
 
-    final responseJson = jsonDecode(response.body);
-    petId = responseJson["petID"];
-
-    if (responseJson["code"] == 0) {
-      final responseUploadImgCode = await uploadImage(pickedImage!, petUploadImgUrl, petId);
-      print("Response code: $responseUploadImgCode");
-
-      if (responseUploadImgCode == 0) {
-        if (context.mounted) {
-          context.push(HomePage.id);
-        }
-      } else {
-        print("Couldn't upload image");
-      }
+    if (pickedImage != null) {
+      request.files.clear();
+      request.files.add(http.MultipartFile.fromBytes(
+          "img", File(pickedImage!.path).readAsBytesSync(),
+          filename: pickedImage!.path, contentType: MediaType('image', 'jpeg')));
     }
-  }
+    // print("PetRegisterPage: ${request.fields.length}");
+    print("PetRegisterPage: ${request.files[0].length}");
+    //? Get results as Streamed Response and convert to normal Response
+    var streamedResponse = await request.send();
+    if (streamedResponse.statusCode == 200) {
+      print('Pet Registered successfully!');
+      if (context.mounted) context.push(HomePage.id);
+      //? Retrieve data from the response
+    }else{
+      print('Failed to Register Pet');
+    }
 
-  File? pickedImage;
+    // //TODO: Add dog breed
+    // final response = await http.post(petRegisterUrl,
+    //     headers: {'Content-Type': 'application/json'},
+    //     body: jsonEncode({
+    //       'petName': _nameController.text,
+    //       'petSex': _gender,
+    //       'petBirthYear': _birthdayController.text.substring(0, 4),
+    //       'petBirthMonth': _birthdayController.text.substring(5),
+    //       'petAdoptYear': _adoptionDateController.text.substring(0, 4),
+    //       'petAdoptMonth': _adoptionDateController.text.substring(5),
+    //       'petWeight': _weightController.text,
+    //       'uid': await _secureStorage.getUserName() ?? '',
+    //     }));
+    //
+    // final responseJson = jsonDecode(response.body);
+    // petId = responseJson["petID"];
+    //
+    // if (responseJson["code"] == 0) {
+    //   final responseUploadImgCode = await uploadPetImage(pickedImage!, petId);
+    //   print("Response code: $responseUploadImgCode");
+    //
+    //   if (responseUploadImgCode == 0) {
+    //     if (context.mounted) {
+    //       context.push(HomePage.id);
+    //     }
+    //   } else {
+    //     print("Couldn't upload image");
+    //   }
+    // }
+  }
 
   Future pickImage(source_) async {
     try {

@@ -85,8 +85,9 @@ def userUploadImg():
 def petRegister():
     db.ping()
     petName, petSex, petBirthYear, petBirthMonth, petAdoptYear, petAdoptMonth, petWeight, uid = itemgetter(
-        'petName', 'petSex', 'petBirthYear', 'petBirthMonth', 'petAdoptYear', 'petAdoptMonth', 'petWeight', 'uid')(request.json)
-    return __pet__.register(petName, petSex, petBirthYear, petBirthMonth, petAdoptYear, petAdoptMonth, petWeight, uid)
+        'petName', 'petSex', 'petBirthYear', 'petBirthMonth', 'petAdoptYear', 'petAdoptMonth', 'petWeight', 'uid')(request.form)
+    petImg = request.files["img"].read()
+    return __pet__.register(petName, petSex, petBirthYear, petBirthMonth, petAdoptYear, petAdoptMonth, petWeight, petImg, uid)
 
 
 @app.route('/pet/getlist', methods=['POST'])

@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       this.endOfCarousel = endOfCarousel;
     });
-    print(endOfCarousel);
+    // print(endOfCarousel);
   }
   late List<dynamic> currentPet;
 

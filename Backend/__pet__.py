@@ -16,7 +16,7 @@ resMsg = {
 }
 
 
-def register(petName, petSex, petBirthYear, petBirthMonth, petAdoptYear, petAdoptMonth, petWeight, uid):
+def register(petName, petSex, petBirthYear, petBirthMonth, petAdoptYear, petAdoptMonth, petWeight, petImg, uid):
     try:
         if petName == "":
             resMsg["code"] = 1
@@ -26,6 +26,7 @@ def register(petName, petSex, petBirthYear, petBirthMonth, petAdoptYear, petAdop
             resMsg["code"] = 2
             resMsg["msg"] = "You did not enter a pet's sex."
             return resMsg
+        # my_img = Image.open(io.BytesIO(img))
         sql = "SELECT uid FROM user WHERE uid = '%s'" % (uid)
         server.cur.execute(sql)
         server.db.commit()
@@ -35,19 +36,22 @@ def register(petName, petSex, petBirthYear, petBirthMonth, petAdoptYear, petAdop
             resMsg["msg"] = "User with the requested user ID does not exist."
             return resMsg
         else:
-            sql = "INSERT INTO pet VALUES(null, '%s', '%s', %s, %s, %s, %s, %s, null, '%s')" % (
-                petName, petSex, petBirthYear, petBirthMonth, petAdoptYear, petAdoptMonth, petWeight, uid)
-            server.cur.execute(sql)
+            img_base64 = "null"
+            if petImg != None:
+                img_base64 = base64.b64encode(petImg).decode('utf-8')
+            sql = """INSERT INTO pet VALUES(null, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+            server.cur.execute(sql, (petName, petSex, petBirthYear, petBirthMonth, petAdoptYear, petAdoptMonth, petWeight, petImg, uid))
             server.db.commit()
-            sql = "SELECT petid FROM pet WHERE petname = '%s' and uid = '%s'" % (
-                petName, uid)
-            server.cur.execute(sql)
+            sql = """SELECT petid FROM pet WHERE petname = %s and uid = %s"""
+            print(sql)
+            server.cur.execute(sql, (petName, uid))
             server.db.commit()
             petId = server.cur.fetchone()
             print(result)
             resMsg["code"] = 0
             resMsg["msg"] = "Success!"
             resMsg["petID"] = petId[0]
+            resMsg["petImg"] = img_base64
         return resMsg
     except pymysql.err.IntegrityError as e:
         code, msg = e.args
@@ -70,7 +74,8 @@ def deleteAllPets(uid):
 
 def getList(uid):
     try:
-        sql = "SELECT * FROM pet WHERE uid = '%s'" % (uid)
+        sql = """SELECT `petid`, `petname`, `petsex`, `petbirthyear`, `petbirthmonth`, `petadoptyear`, 
+        `petadoptmonth`, `petweight`, TO_BASE64(petimg), `uid` FROM pet WHERE uid = '%s'""" % (uid)
         server.cur.execute(sql)
         result = server.cur.fetchall()
         return jsonify(result)
@@ -94,7 +99,8 @@ def getListCountPets(uid):
 
 def getInfo(petid):
     try:
-        sql = "SELECT * FROM pet WHERE petid = '%s'" % (petid)
+        sql = """SELECT `petid`, `petname`, `petsex`, `petbirthyear`, `petbirthmonth`, `petadoptyear`, 
+        `petadoptmonth`, `petweight`, TO_BASE64(petimg), `uid` FROM pet WHERE petid = %s""" % (petid)
         server.cur.execute(sql)
         result = server.cur.fetchone()
         return jsonify(result)
@@ -143,10 +149,8 @@ def uploadImg(petid, img):
             resMsg["code"] = 3
             resMsg["msg"] = "You didn't add image"
             return resMsg
-        decodedImg = Image.open(io.BytesIO(img.read()))
-        path = './static/petimg/' + petid + '.' + decodedImg.format
-        print(decodedImg)
-        decodedImg.save(path)
+        # my_img = Image.open(io.BytesIO(img))
+        img_base64 = base64.b64encode(img).decode('utf-8')
 
         # # Convert image to bytes
         # image_bytes = decodedImg.tobytes()
@@ -154,7 +158,7 @@ def uploadImg(petid, img):
         # image_string = base64.b64encode(image_bytes).decode('utf-8')
         # print(image_string)
 
-        sql = "UPDATE pet SET petimg = '%s' WHERE petid = %s" % (path, petid)
+        sql = "UPDATE pet SET petimg = '%s' WHERE petid = %s" % (img_base64, petid)
         server.cur.execute(sql)
         server.db.commit()
         resMsg["code"] = 0

@@ -1,13 +1,22 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/pet_bloc/pet_bloc.dart';
 
-class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
+//? Primary Color Background
+class MyAppBarPrimary extends StatelessWidget implements PreferredSizeWidget {
   final double appbarSize;
   final String petName;
+  final String? subtitle;
+  final File? petImg;
 
-  const MyAppBar({required this.appbarSize, Key? key, required this.petName})
+  const MyAppBarPrimary({
+    required this.appbarSize,
+    Key? key,
+    required this.petName,
+    this.subtitle, required this.petImg})
       : super(key: key);
 
   @override
@@ -15,34 +24,35 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
     return BlocBuilder<PetBloc, PetState>(
       builder: (context, state) {
         return AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).colorScheme.primary,
           automaticallyImplyLeading: false,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () => {
-              Navigator.of(context).pop()},
-            color: Colors.black,
-          ),
+          // leading: IconButton(
+          //   icon: Icon(Icons.arrow_back),
+          //   onPressed: () => {
+          //     Navigator.of(context).pop()},
+          //   color: Colors.black,
+          // ),
           toolbarHeight: appbarSize,
           elevation: 0,
-          shadowColor: Colors.white,
           actions: [
-            IconButton(
-              onPressed: () {},
-              color: Colors.black,
-              iconSize: 32,
-              icon: Icon(Icons.search),
-              tooltip: "Search",
-            ),
-            IconButton(
-              onPressed: () {},
-              color: Colors.black,
-              icon: Icon(Icons.menu),
-              iconSize: 32,
-              tooltip: "Navigation",
-            ),
+            // IconButton(
+            //   onPressed: () {},
+            //   color: Colors.black,
+            //   iconSize: 32,
+            //   icon: Icon(Icons.search),
+            //   tooltip: "Search",
+            // ),
+            // IconButton(
+            //   onPressed: () {},
+            //   color: Colors.black,
+            //   icon: Icon(Icons.menu),
+            //   iconSize: 32,
+            //   tooltip: "Navigation",
+            // ),
           ],
-          titleTextStyle: const TextStyle(color: Colors.black, fontSize: 32),
+          titleTextStyle: TextStyle(
+              color: Theme.of(context).colorScheme.onPrimary,
+              fontSize: Theme.of(context).textTheme.headlineLarge?.fontSize),
           title: InkWell(
             //TODO: Move uer to home page
             onTap: () {},
@@ -51,19 +61,132 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
               children: [
                 Row(
                   children: [
-                    ClipOval(
-                      //TODO: add pet image
-                      child: Image(
-                          image: AssetImage("assets/img/no_image.png"),
-                          width: 60,
-                          height: 60),
-                    ),
+                    if (petImg != null)
+                      ClipOval(
+                        child: Image.file(
+                            petImg!,
+                            fit: BoxFit.cover,
+                            width: 60,
+                            height: 60),
+                      ),
+                    if (petImg == null)
+                      ClipOval(
+                        clipBehavior: Clip.hardEdge,
+                        child: Image(
+                            image: AssetImage("assets/img/no_image.png"),
+                            fit: BoxFit.cover,
+                            width: 60,
+                            height: 60),
+                      ),
                     SizedBox(
                       width: 8,
                     ),
                     Text(petName,
                         style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold)),
+                            color: Theme.of(context).colorScheme.onPrimary,
+                            fontWeight: FontWeight.bold)),
+                  ],
+                ),
+                if (subtitle != null)
+                  SizedBox(height: 12,),
+                  Row(
+                    children: [
+                      Text(subtitle!, style: TextStyle(
+                        color: Theme.of(context).colorScheme.onPrimary,
+                        fontSize: Theme.of(context).textTheme.titleLarge?.fontSize
+                      ),)
+                    ],
+                  )
+
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  // TODO: implement preferredSize
+  Size get preferredSize => new Size.fromHeight(appbarSize);
+}
+
+//? White Appbar
+class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final double appbarSize;
+  final String petName;
+  final File? petImg;
+
+  const MyAppBar({
+    required this.appbarSize,
+    Key? key,
+    required this.petName, required this.petImg,})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<PetBloc, PetState>(
+      builder: (context, state) {
+        return AppBar(
+          backgroundColor: Theme.of(context).colorScheme.background,
+          automaticallyImplyLeading: false,
+          // leading: IconButton(
+          //   icon: Icon(Icons.arrow_back),
+          //   onPressed: () => {
+          //     Navigator.of(context).pop()},
+          //   color: Colors.black,
+          // ),
+          toolbarHeight: appbarSize,
+          elevation: 0,
+          actions: [
+            // IconButton(
+            //   onPressed: () {},
+            //   color: Colors.black,
+            //   iconSize: 32,
+            //   icon: Icon(Icons.search),
+            //   tooltip: "Search",
+            // ),
+            // IconButton(
+            //   onPressed: () {},
+            //   color: Colors.black,
+            //   icon: Icon(Icons.menu),
+            //   iconSize: 32,
+            //   tooltip: "Navigation",
+            // ),
+          ],
+          titleTextStyle: TextStyle(
+              color: Theme.of(context).colorScheme.onBackground,
+              fontSize: Theme.of(context).textTheme.headlineLarge?.fontSize),
+          title: InkWell(
+            //TODO: Move uer to home page
+            onTap: () {},
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    if (petImg != null)
+                      ClipOval(
+                        child: Image.file(
+                            petImg!,
+                            fit: BoxFit.cover,
+                            width: 60,
+                            height: 60),
+                      ),
+                    if (petImg == null)
+                        ClipOval(
+                          child: Image(
+                              image: AssetImage("assets/img/no_image.png"),
+                              width: 60,
+                              height: 60),
+                        ),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    Text(petName,
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.onBackground,
+                            fontWeight: FontWeight.bold)),
                   ],
                 ),
               ],

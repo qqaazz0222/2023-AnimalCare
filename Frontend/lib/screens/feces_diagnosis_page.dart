@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../bloc/pet_bloc/pet_bloc.dart';
-import '../utils/pickImageFeces.dart';
+import '../utils/imagePickers.dart';
 
 class FecesDiagnosisPage extends StatelessWidget {
   const FecesDiagnosisPage({Key? key}) : super(key: key);
@@ -29,7 +29,8 @@ class FecesDiagnosisPage extends StatelessWidget {
               backgroundColor: Colors.grey,
               appBar: MyAppBar(
                   appbarSize: 140,
-                  petName: petState.selectedPet?.petName ?? "Your Pet"
+                  petName: petState.selectedPet?.petName ?? "Your Pet",
+                  petImg: petState.selectedPet?.petImg
               ),
               body: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -104,7 +105,7 @@ class FecesDiagnosisPage extends StatelessWidget {
                           Center(
                             child: ElevatedButton(
                                 onPressed: () async {
-                                  await pickImage(ImageSource.gallery, fecesBloc, petState);
+                                  await pickImageFeces(ImageSource.gallery, fecesBloc, petState);
                                 },
                                 child: const Text("촬영하기!")),
                           ),
