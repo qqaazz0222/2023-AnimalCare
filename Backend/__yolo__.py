@@ -17,6 +17,7 @@ def saveImage(file):
 
 def predict(imgPath):
     temp = model(imgPath)
+    print(temp)
     if str(temp).split(" ")[4].split("\n")[0] == "good" or str(temp).split(" ")[4].split("\n")[0] == "goods":
         return "g"
     else:
