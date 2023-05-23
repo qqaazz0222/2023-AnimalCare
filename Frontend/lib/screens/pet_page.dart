@@ -154,23 +154,15 @@ class _PetPageState extends State<PetPage> {
                                                 late StreamSubscription<
                                                         HealthCheckState>
                                                     fecesStateSubscription;
-                                                fecesStateSubscription = fecesBloc
-                                                    .stream
-                                                    .listen((fecesState) {
-                                                  if (fecesState
-                                                              .lastHealthCheckResults ==
-                                                          null &&
-                                                      !fecesState.isLoading) {
+                                                fecesStateSubscription = fecesBloc.stream.listen((fecesState) {
+                                                  if (fecesState.lastHealthCheckResults == null && !fecesState.isLoading) {
                                                     Navigator.push(
                                                       context,
                                                       MaterialPageRoute(
                                                         builder: (_) =>
-                                                            MultiBlocProvider(
-                                                          providers: [
-                                                            BlocProvider.value(
-                                                                value: petBloc),
-                                                            BlocProvider.value(
-                                                                value: fecesBloc),
+                                                            MultiBlocProvider(providers: [
+                                                            BlocProvider.value(value: petBloc),
+                                                            BlocProvider.value(value: fecesBloc),
                                                           ],
                                                           child: FecesCarePage(),
                                                         ),

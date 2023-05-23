@@ -182,7 +182,22 @@ class _PetCardCarouselState extends State<PetCardCarousel> {
           // print(snapshot.error);
           return Text('Failed to fetch data');
         } else {
-          return CircularProgressIndicator();
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Loading Pets...",
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onBackground,
+                  fontSize: Theme.of(context).textTheme.bodyLarge?.fontSize,
+                  fontWeight: FontWeight.bold
+                ),),
+              const SizedBox(height: 18,),
+              CircularProgressIndicator(
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ],
+          );
         }
       },
     );

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:animal_care_flutter_app/screens/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -52,10 +53,14 @@ class MyAppBarPrimary extends StatelessWidget implements PreferredSizeWidget {
           ],
           titleTextStyle: TextStyle(
               color: Theme.of(context).colorScheme.onPrimary,
-              fontSize: Theme.of(context).textTheme.headlineLarge?.fontSize),
+              fontSize: Theme.of(context).textTheme.headlineMedium?.fontSize),
           title: InkWell(
-            //TODO: Move uer to home page
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (_) => HomePage())
+              );
+            },
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -129,6 +134,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       builder: (context, state) {
         return AppBar(
           backgroundColor: Theme.of(context).colorScheme.background,
+          surfaceTintColor: Theme.of(context).colorScheme.background,
           automaticallyImplyLeading: false,
           // leading: IconButton(
           //   icon: Icon(Icons.arrow_back),
@@ -156,10 +162,14 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
           ],
           titleTextStyle: TextStyle(
               color: Theme.of(context).colorScheme.onBackground,
-              fontSize: Theme.of(context).textTheme.headlineLarge?.fontSize),
+              fontSize: Theme.of(context).textTheme.headlineMedium?.fontSize),
           title: InkWell(
-            //TODO: Move uer to home page
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                    builder: (_) => HomePage())
+              );
+            },
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [

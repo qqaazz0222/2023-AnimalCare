@@ -234,9 +234,9 @@ class _HomePageState extends State<HomePage> {
                                                       fontSize: Theme.of(context).textTheme.bodySmall?.fontSize,
                                                     ),
                                                   ),
-                                                  trailing: Image.asset("assets/img/feces_icon.png"),
+                                                  trailing: Image.asset("assets/img/feces_icon.png", width: 60,),
                                                 ),
-                                              ], //TODO: Add icon image
+                                              ],
                                             ),
                                           ),
                                         ),
@@ -272,9 +272,9 @@ class _HomePageState extends State<HomePage> {
                                                 fontSize: Theme.of(context).textTheme.bodySmall?.fontSize,
                                               ),
                                             ),
-                                            trailing: Image.asset("assets/img/food_icon.png"),
+                                            trailing: Image.asset("assets/img/food_icon.png", width: 60,),
                                           ),
-                                        ], //TODO: Add icon image
+                                        ],
                                       ),
                                     ),
                                   ),
@@ -312,9 +312,9 @@ class _HomePageState extends State<HomePage> {
                                                 fontSize: Theme.of(context).textTheme.bodySmall?.fontSize,
                                               ),
                                             ),
-                                            trailing: Image.asset("assets/img/calendar_icon.png"),
+                                            trailing: Image.asset("assets/img/calendar_icon.png", width: 60,),
                                           ),
-                                        ], //TODO: Add icon image
+                                        ],
                                       ),
                                     ),
                                   ),
@@ -347,9 +347,9 @@ class _HomePageState extends State<HomePage> {
                                                 fontSize: Theme.of(context).textTheme.bodySmall?.fontSize,
                                               ),
                                             ),
-                                            trailing: Image.asset("assets/img/walk_icon.png"),
+                                            trailing: Image.asset("assets/img/walk_icon.png", width: 60,),
                                           ),
-                                        ], //TODO: Add icon image
+                                        ],
                                       ),
                                     ),
                                   ),
@@ -384,7 +384,7 @@ class _HomePageState extends State<HomePage> {
                                             ),
                                           ),
                                         ),
-                                      ], //TODO: Add icon image
+                                      ]
                                     ),
                                   ),
                                 ),
