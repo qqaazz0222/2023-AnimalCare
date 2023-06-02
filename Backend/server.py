@@ -150,16 +150,3 @@ def logHealthCheck():
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=3001, debug=True)
-    
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JetBot Camera Streaming</title>
-</head>
-<body>
-    <h1>JetBot Camera Streaming</h1>
-    <img src="{{ url_for('video_feed') }}" width="640" height="480">
-</body>
-</html>
