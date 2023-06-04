@@ -12,6 +12,7 @@ import __user__
 import __pet__
 import __log__
 import __yolo__
+import __websocket__
 
 
 app = Flask(__name__)
@@ -150,3 +151,4 @@ def logHealthCheck():
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=3001, debug=True)
+    __websocket__.start()
