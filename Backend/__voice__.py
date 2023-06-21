@@ -25,7 +25,7 @@ def send_data_over_websocket(text):
             print("Text sent:", text)
 
     websocket.enableTrace(True)
-    ws = websocket.WebSocketApp("ws:localhost:8000", on_open=on_open)
+    ws = websocket.WebSocketApp("ws:localhost:8000", on_open=on_open)#웹소켓 주소 확정 시 변경 필요
     ws.on_open = on_open
     ws.run_forever()
 
